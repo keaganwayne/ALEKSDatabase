@@ -6,56 +6,34 @@
   <title>ALEKS Calendar</title>
   <style>
     :root{
-  --bg: #eef3f8;
-  --panel: #ffffff;
-  --panel2: #f5f9fc;
-  --text: #133a7c;
-  --muted: #5d7297;
-  --line: #d7e3f0;
-  --accent: #11b7d8;
-  --accent-2: #2457a6;
-  --good: #59c36a;
-  --warn: #f2c94c;
-  --bad: #e76f51;
-  --today: #11b7d8;
-  --shadow: 0 8px 24px rgba(19, 58, 124, 0.08);
-}
-      
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 12px 14px;
-  background: #ffffff;
-  color: #1f2937;
-  border: 1px solid #cfe0ef;
-  border-radius: 12px;
-  margin-top: 6px;
-  color-scheme: light;
-}
-
-input[type="date"],
-input[type="number"],
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-  background: #ffffff;
-  color: #1f2937;
-}
+      --bg:#eef3f8;
+      --panel:#ffffff;
+      --panel2:#f5f9fc;
+      --text:#133a7c;
+      --muted:#5d7297;
+      --line:#d7e3f0;
+      --accent:#11b7d8;
+      --accent-2:#2457a6;
+      --good:#59c36a;
+      --warn:#f2c94c;
+      --bad:#e76f51;
+      --today:#11b7d8;
+      --shadow:0 8px 24px rgba(19,58,124,0.08);
+    }
 
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(180deg, #eef4fb 0%, #f8fbfe 100%);
-      color: var(--text);
+      font-family:Arial, Helvetica, sans-serif;
+      background:linear-gradient(180deg, #eef4fb 0%, #f8fbfe 100%);
+      color:var(--text);
     }
-    .wrap{max-width:1300px;margin:0 auto;padding:20px}
+    .wrap{max-width:1400px;margin:0 auto;padding:20px}
     .topbar,.panel,.card{
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      box-shadow: var(--shadow);
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow);
     }
     .topbar{
       display:flex;justify-content:space-between;align-items:center;
@@ -63,56 +41,60 @@ input[type="password"] {
     }
     .layout{
       display:grid;
-      grid-template-columns:280px 1fr;
+      grid-template-columns:300px 1fr;
       gap:16px;
     }
     .panel{padding:16px}
     .sidebar h3,.content h2{margin-top:0}
     .content{display:grid;gap:16px}
     .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    .tab-btn, button{
-        border: 1px solid var(--line);
-        background: var(--panel2);
-        color: var(--accent-2);
-        border-radius: 12px;
-        padding: 10px 14px;
-        cursor: pointer;
-        font-weight: 600;
-        transition: 0.2s ease;
-      }
-
-    button:hover, .tab-btn:hover{
-      background: #eaf5fb;
-      border-color: #b9dcef;
+    .tab-btn,button{
+      border:1px solid var(--line);
+      background:var(--panel2);
+      color:var(--accent-2);
+      border-radius:12px;
+      padding:10px 14px;
+      cursor:pointer;
+      font-weight:600;
+      transition:0.2s ease;
     }
-
+    button:hover,.tab-btn:hover{
+      background:#eaf5fb;
+      border-color:#b9dcef;
+    }
     .tab-btn.active{
-      background: var(--accent-2);
-      color: #ffffff;
-      border-color: var(--accent-2);
-      outline: none;
+      background:var(--accent-2);
+      color:#fff;
+      border-color:var(--accent-2);
+      outline:none;
     }
-
-input:focus, select:focus, textarea:focus{
-  outline:none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(17,183,216,0.15);
-}
-
-    option {
-  background: #ffffff;
-  color: #111111;
-}
-    textarea{min-height:90px;resize:vertical}
+    input,select,textarea{
+      width:100%;
+      padding:12px 14px;
+      background:#fff;
+      color:#1f2937;
+      border:1px solid #cfe0ef;
+      border-radius:12px;
+      margin-top:6px;
+      color-scheme:light;
+    }
+    input:focus,select:focus,textarea:focus{
+      outline:none;
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px rgba(17,183,216,0.15);
+    }
+    option{
+      background:#fff;
+      color:#1f2937;
+    }
+    textarea{min-height:110px;resize:vertical}
     .grid{display:grid;gap:12px}
     .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
     .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+    .grid-4{grid-template-columns:repeat(4,minmax(0,1fr))}
     .card{padding:14px}
     .muted{color:var(--muted)}
-    .hidden {
-      display: none !important;
-      pointer-events: none !important;
-    }
+    .hidden{display:none !important;pointer-events:none !important}
     table{
       width:100%;
       border-collapse:collapse;
@@ -125,62 +107,90 @@ input:focus, select:focus, textarea:focus{
       vertical-align:top;
     }
     .progress{
-  height:14px;
-  background:#edf3f8;
-  border-radius:999px;
-  overflow:hidden;
-  border:1px solid #d9e7f1;
-}
-.progress > div{
-  height:100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
-}
-    .badge{display:inline-block;padding:4px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px}
+      height:14px;
+      background:#edf3f8;
+      border-radius:999px;
+      overflow:hidden;
+      border:1px solid #d9e7f1;
+    }
+    .progress > div{
+      height:100%;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+    }
+    .badge{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      font-size:12px;
+      font-weight:600;
+      background:#fff;
+    }
     .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
     .lesson-strip{
-  line-height:2.2;
-  font-weight:600;
-  color: var(--accent-2);
-}
+      line-height:2.2;
+      font-weight:600;
+      color:var(--accent-2);
+    }
     .status-good{color:var(--good)}
     .status-bad{color:var(--bad)}
     .status-today{color:var(--today)}
     .auth-box{max-width:460px;margin:50px auto}
-    @media (max-width: 960px){
-      .layout{grid-template-columns:1fr}
-      .grid-2,.grid-3{grid-template-columns:1fr}
+    .toolbar{
+      display:flex;gap:10px;align-items:end;flex-wrap:wrap;
     }
-    
+    .danger{
+      color:#fff;
+      background:var(--bad);
+      border-color:var(--bad);
+    }
+    .subtle{
+      background:#fff;
+    }
     input[type="range"]{
-  accent-color: var(--accent);
-  padding: 0;
-  background: transparent;
-  border: none;
-}
+      accent-color:var(--accent);
+      padding:0;
+      background:transparent;
+      border:none;
+      margin-top:10px;
+    }
+    canvas{
+      width:100%;
+      max-height:420px;
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:14px;
+    }
+    .tiny{
+      font-size:12px;
+    }
+    @media (max-width: 1100px){
+      .layout{grid-template-columns:1fr}
+      .grid-2,.grid-3,.grid-4{grid-template-columns:1fr}
+    }
   </style>
 </head>
 <body>
 <div class="wrap">
   <div id="authView" class="auth-box panel">
-  <h2>ALEKS Calendar</h2>
-  <p class="muted">Teacher sign in</p>
+    <h2>ALEKS Calendar</h2>
+    <p class="muted">Teacher sign in</p>
 
-  <form id="authForm" class="grid">
-    <label for="email">Email</label>
-    <input id="email" name="email" type="email" autocomplete="email" />
+    <form id="authForm" class="grid">
+      <label for="email">Email</label>
+      <input id="email" name="email" type="email" autocomplete="email" />
 
-    <label for="password">Password</label>
-    <input id="password" name="password" type="password" autocomplete="current-password" />
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" />
 
-    <div class="row">
-      <button id="signInBtn" type="submit">Sign in</button>
-      <button id="signUpBtn" type="button">Create account</button>
-      <button id="signOutBtn" type="button" class="hidden">Sign out</button>
-    </div>
+      <div class="row">
+        <button id="signInBtn" type="submit">Sign in</button>
+        <button id="signUpBtn" type="button">Create account</button>
+      </div>
 
-    <div id="authMsg" class="muted"></div>
-  </form>
-</div>
+      <div id="authMsg" class="muted"></div>
+    </form>
+  </div>
 
   <div id="appView" class="hidden">
     <div class="topbar">
@@ -224,19 +234,26 @@ input:focus, select:focus, textarea:focus{
         <div class="panel">
           <div class="tabs">
             <button class="tab-btn active" data-tab="dashboardTab">Dashboard</button>
-            <button class="tab-btn" data-tab="manageTab">Manage cycles & students</button>
+            <button class="tab-btn" data-tab="manageTab">Manage</button>
+            <button class="tab-btn" data-tab="overviewTab">Progress Overview</button>
           </div>
 
           <section id="dashboardTab">
-            <div class="grid grid-2">
+            <div class="grid grid-4">
               <label>Cycle
                 <select id="dashCycle"></select>
+              </label>
+              <label>Class
+                <select id="dashClass"></select>
               </label>
               <label>Student
                 <select id="dashStudent"></select>
               </label>
+              <div class="card subtle">
+                <div class="muted tiny">Current selection</div>
+                <div id="selectionInfo" style="font-weight:700;margin-top:8px;">—</div>
+              </div>
             </div>
-
             <div id="dashboardBody" class="grid" style="margin-top:14px;"></div>
           </section>
 
@@ -253,23 +270,69 @@ input:focus, select:focus, textarea:focus{
               </div>
 
               <div class="card">
-                <h3>Students</h3>
-                <div class="row">
-                  <input id="newStudentName" placeholder="Add student name" />
-                  <button id="addStudentBtn">Add student</button>
+                <h3>Classes</h3>
+                <div class="toolbar">
+                  <div style="flex:1;min-width:220px;">
+                    <label>Class name
+                      <input id="newClassName" placeholder="Add class name">
+                    </label>
+                  </div>
+                  <button id="addClassBtn">Add class</button>
                 </div>
+                <div id="classList" style="margin-top:12px;"></div>
+              </div>
+
+              <div class="card">
+                <h3>Students</h3>
+                <div class="grid grid-2">
+                  <label>Student name
+                    <input id="newStudentName" placeholder="Add student name" />
+                  </label>
+                  <label>Class
+                    <select id="newStudentClass"></select>
+                  </label>
+                </div>
+                <button id="addStudentBtn" style="margin-top:10px;">Add student</button>
                 <div id="studentList" style="margin-top:12px;"></div>
               </div>
 
               <div class="card">
                 <h3>Cycle goals</h3>
-                <div class="grid grid-2">
+                <div class="grid grid-3">
                   <label>Cycle
                     <select id="goalCycle"></select>
                   </label>
+                  <label>Class
+                    <select id="goalClass"></select>
+                  </label>
+                  <label>Set same goal for all shown students
+                    <input id="bulkGoalValue" type="number" min="0" value="0">
+                  </label>
                 </div>
+                <button id="applyBulkGoalBtn" style="margin-top:10px;">Apply goal to all shown students</button>
                 <div id="goalList" style="margin-top:12px;"></div>
               </div>
+            </div>
+          </section>
+
+          <section id="overviewTab" class="hidden">
+            <div class="grid grid-2">
+              <label>Cycle
+                <select id="overviewCycle"></select>
+              </label>
+              <label>Class
+                <select id="overviewClass"></select>
+              </label>
+            </div>
+            <div class="card" style="margin-top:14px;">
+              <h3>Progress Overview</h3>
+              <canvas id="overviewCanvas" width="1200" height="420"></canvas>
+              <div class="row" style="margin-top:10px;">
+                <span class="badge">Goal</span>
+                <span class="badge">Current</span>
+                <span class="badge">Projected</span>
+              </div>
+              <div id="overviewTable" style="margin-top:12px;"></div>
             </div>
           </section>
         </div>
@@ -290,75 +353,58 @@ input:focus, select:focus, textarea:focus{
     settings: { teaching_days: [0,1,3,4] },
     holidays: [],
     cycles: [],
+    classes: [],
     students: [],
-    goals: [],
-    logs: []
+    goals: []
   };
 
   const $ = (id) => document.getElementById(id);
   const dayChecks = () => [...document.querySelectorAll('.dayCheck')];
-  function parseDateLocal(isoDate) {
-  const [y, m, d] = isoDate.split('-').map(Number);
-  return new Date(y, m - 1, d);
-}
+  const fmtNum = (n) => Number.isFinite(n) ? n.toFixed(1) : '0.0';
 
-function formatLocalDate(dateObj) {
-  const y = dateObj.getFullYear();
-  const m = String(dateObj.getMonth() + 1).padStart(2, '0');
-  const d = String(dateObj.getDate()).padStart(2, '0');
-  return `${y}-${m}-${d}`;
-}
+  function parseDateLocal(isoDate) {
+    const [y, m, d] = isoDate.split('-').map(Number);
+    return new Date(y, m - 1, d);
+  }
+
+  function formatLocalDate(dateObj) {
+    const y = dateObj.getFullYear();
+    const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+    const d = String(dateObj.getDate()).padStart(2, '0');
+    return `${y}-${m}-${d}`;
+  }
+
   const todayIso = () => formatLocalDate(new Date());
 
   function clamp01(x){ return Math.max(0, Math.min(1, x)); }
   function safeDiv(n,d){ return d > 0 ? n / d : 0; }
 
-$('authForm').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  await signIn();
-});
-
   function expandHolidayDates(ranges) {
-  const out = new Set();
-  for (const r of ranges) {
-    let d = parseDateLocal(r.start_date);
-    const end = parseDateLocal(r.end_date);
-    while (d <= end) {
-      out.add(formatLocalDate(d));
+    const out = new Set();
+    for (const r of ranges){
+      let d = parseDateLocal(r.start_date);
+      const end = parseDateLocal(r.end_date);
+      while (d <= end){
+        out.add(formatLocalDate(d));
+        d.setDate(d.getDate() + 1);
+      }
+    }
+    return [...out].sort();
+  }
+
+  function lessonDates(startIso, endIso, teachingDays, holidayDates) {
+    const holidays = new Set(holidayDates);
+    const out = [];
+    let d = parseDateLocal(startIso);
+    const end = parseDateLocal(endIso);
+    while (d <= end){
+      const iso = formatLocalDate(d);
+      const jsDay = (d.getDay() + 6) % 7;
+      if (teachingDays.includes(jsDay) && !holidays.has(iso)) out.push(iso);
       d.setDate(d.getDate() + 1);
     }
+    return out;
   }
-  return [...out].sort();
-}
-
-function lessonDates(startIso, endIso, teachingDays, holidayDates) {
-  const holidays = new Set(holidayDates);
-  const out = [];
-  let d = parseDateLocal(startIso);
-  const end = parseDateLocal(endIso);
-  while (d <= end) {
-    const iso = formatLocalDate(d);
-    const jsDay = (d.getDay() + 6) % 7;
-    if (teachingDays.includes(jsDay) && !holidays.has(iso)) out.push(iso);
-    d.setDate(d.getDate() + 1);
-  }
-  return out;
-}
-
-function teachingDatesIncludingHolidays(startIso, endIso, teachingDays) {
-  const out = [];
-  let d = parseDateLocal(startIso);
-  const end = parseDateLocal(endIso);
-  while (d <= end) {
-    const iso = formatLocalDate(d);
-    const jsDay = (d.getDay() + 6) % 7;
-    if (teachingDays.includes(jsDay)) out.push(iso);
-    d.setDate(d.getDate() + 1);
-  }
-  return out;
-}
-
-
 
   function statusEmoji(iso){
     const today = todayIso();
@@ -368,24 +414,27 @@ function teachingDatesIncludingHolidays(startIso, endIso, teachingDays) {
   }
 
   function cycleStats(logs, lessonDayCount) {
-  const total = logs.reduce((a, b) => a + (b.topics_completed || 0), 0);
-  const distinctDays = new Set(logs.map(x => x.log_date)).size;
-  const pace = safeDiv(total, distinctDays);
-  const projected = pace * lessonDayCount;
+    const presentLogs = logs.filter(x => x.attendance_status !== 'absent');
+    const total = presentLogs.reduce((a, b) => a + (b.topics_completed || 0), 0);
+    const distinctDays = new Set(presentLogs.map(x => x.log_date)).size;
+    const pace = safeDiv(total, distinctDays);
+    const projected = pace * lessonDayCount;
 
-  const focusLogs = logs.filter(x => x.focus !== null && x.focus !== undefined);
-  const disruptionLogs = logs.filter(x => x.disruption !== null && x.disruption !== undefined);
+    const focusLogs = presentLogs.filter(x => x.focus !== null && x.focus !== undefined);
+    const disruptionLogs = presentLogs.filter(x => x.disruption !== null && x.disruption !== undefined);
 
-  const avgFocus = focusLogs.length
-    ? focusLogs.reduce((a, b) => a + Number(b.focus), 0) / focusLogs.length
-    : null;
+    const avgFocus = focusLogs.length
+      ? focusLogs.reduce((a, b) => a + Number(b.focus), 0) / focusLogs.length
+      : null;
 
-  const avgDisruption = disruptionLogs.length
-    ? disruptionLogs.reduce((a, b) => a + Number(b.disruption), 0) / disruptionLogs.length
-    : null;
+    const avgDisruption = disruptionLogs.length
+      ? disruptionLogs.reduce((a, b) => a + Number(b.disruption), 0) / disruptionLogs.length
+      : null;
 
-  return { total, distinctDays, pace, projected, avgFocus, avgDisruption };
-}
+    const absences = logs.filter(x => x.attendance_status === 'absent').length;
+
+    return { total, distinctDays, pace, projected, avgFocus, avgDisruption, absences };
+  }
 
   async function ensureTeacherProfile(){
     const { data: existing } = await supabase
@@ -418,27 +467,36 @@ function teachingDatesIncludingHolidays(startIso, endIso, teachingDays) {
   async function loadAll(){
     await ensureTeacherProfile();
 
-    const [{ data: settings }, { data: holidays }, { data: cycles }, { data: students }] = await Promise.all([
+    const [
+      { data: settings },
+      { data: holidays },
+      { data: cycles },
+      { data: classes },
+      { data: students }
+    ] = await Promise.all([
       supabase.from('teacher_settings').select('*').eq('teacher_id', state.user.id).single(),
       supabase.from('holiday_ranges').select('*').order('start_date'),
       supabase.from('cycles').select('*').order('start_date', { ascending:false }),
+      supabase.from('classes').select('*').order('name'),
       supabase.from('students').select('*').order('name')
     ]);
 
     state.settings = settings || { teaching_days:[0,1,3,4] };
     state.holidays = holidays || [];
     state.cycles = cycles || [];
+    state.classes = classes || [];
     state.students = students || [];
 
-    await loadGoals();
     renderSettings();
-    renderCycleSelectors();
+    renderSelectors();
     renderManage();
+    await loadGoals();
     await renderDashboard();
+    await renderOverview();
   }
 
   async function loadGoals(){
-    const cycleId = $('goalCycle').value || state.cycles[0]?.id;
+    const cycleId = Number($('goalCycle')?.value || state.cycles[0]?.id || 0);
     if (!cycleId) {
       state.goals = [];
       return;
@@ -451,84 +509,50 @@ function teachingDatesIncludingHolidays(startIso, endIso, teachingDays) {
   }
 
   function renderSettings() {
-  const teachingDays = state.settings?.teaching_days || [0, 1, 3, 4];
-  dayChecks().forEach(cb => cb.checked = teachingDays.includes(Number(cb.value)));
+    const teachingDays = state.settings?.teaching_days || [0,1,3,4];
+    dayChecks().forEach(cb => cb.checked = teachingDays.includes(Number(cb.value)));
 
-  $('holidayList').innerHTML = state.holidays.length
-    ? `<table>
-        <thead><tr><th>Start</th><th>End</th><th></th></tr></thead>
-        <tbody>
-          ${state.holidays.map(h => `
-            <tr>
-              <td>${h.start_date}</td>
-              <td>${h.end_date}</td>
-              <td><button onclick="window.deleteHoliday(${h.id})">Delete</button></td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>`
-    : `<div class="muted">No holiday ranges set.</div>`;
-}
-
-async function loadLogIntoForm(logId) {
-  const { data, error } = await supabase
-    .from('daily_logs')
-    .select('*')
-    .eq('id', logId)
-    .maybeSingle();
-
-  if (error || !data) {
-    alert(error?.message || 'Could not load log.');
-    return;
+    $('holidayList').innerHTML = state.holidays.length
+      ? `<table>
+          <thead><tr><th>Start</th><th>End</th><th></th></tr></thead>
+          <tbody>
+            ${state.holidays.map(h => `
+              <tr>
+                <td>${h.start_date}</td>
+                <td>${h.end_date}</td>
+                <td><button onclick="window.deleteHoliday(${h.id})">Delete</button></td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`
+      : `<div class="muted">No holiday ranges set.</div>`;
   }
 
-  $('newLogDate').value = data.log_date;
-  $('newMinutes').value = data.minutes_in_aleks;
-  $('newTopics').value = data.topics_completed;
-  $('newNote').value = data.note || '';
+  function renderSelectors(){
+    const cycleOptions = state.cycles.map(c => `<option value="${c.id}">${c.start_date} → ${c.end_date}</option>`).join('');
+    const classOptions = state.classes.map(c => `<option value="${c.id}">${c.name}</option>`).join('');
 
-  const trackFocus = $('trackFocus');
-  const trackDisruption = $('trackDisruption');
-  const focusWrap = $('focusWrap');
-  const disruptionWrap = $('disruptionWrap');
-  const focusValue = $('focusValue');
-  const disruptionValue = $('disruptionValue');
+    for (const id of ['dashCycle','goalCycle','overviewCycle']) {
+      if ($(id)) $(id).innerHTML = cycleOptions;
+    }
+    for (const id of ['dashClass','goalClass','overviewClass','newStudentClass']) {
+      if ($(id)) $(id).innerHTML = classOptions;
+    }
 
-  if (trackFocus && focusWrap) {
-    trackFocus.checked = data.focus !== null && data.focus !== undefined;
-    focusWrap.classList.toggle('hidden', !trackFocus.checked);
+    populateStudentSelector();
   }
 
-  if (trackDisruption && disruptionWrap) {
-    trackDisruption.checked = data.disruption !== null && data.disruption !== undefined;
-    disruptionWrap.classList.toggle('hidden', !trackDisruption.checked);
+  function getStudentsForClass(classId){
+    return state.students.filter(s => Number(s.class_id) === Number(classId));
   }
 
-  if ($('newFocus') && data.focus !== null && data.focus !== undefined) {
-    $('newFocus').value = data.focus;
-    if (focusValue) focusValue.textContent = data.focus;
-  }
-
-  if ($('newDisruption') && data.disruption !== null && data.disruption !== undefined) {
-    $('newDisruption').value = data.disruption;
-    if (disruptionValue) disruptionValue.textContent = data.disruption;
-  }
-}
-
-window.loadLogIntoForm = loadLogIntoForm;
-
-  function renderCycleSelectors(){
-    const cycleOptions = state.cycles.map(c =>
-      `<option value="${c.id}">${c.start_date} → ${c.end_date}</option>`
-    ).join('');
-
-    $('dashCycle').innerHTML = cycleOptions;
-    $('goalCycle').innerHTML = cycleOptions;
-
-    const studentOptions = state.students.map(s =>
-      `<option value="${s.id}">${s.name}</option>`
-    ).join('');
-    $('dashStudent').innerHTML = studentOptions;
+  function populateStudentSelector(){
+    const classId = Number($('dashClass')?.value || state.classes[0]?.id || 0);
+    const students = classId ? getStudentsForClass(classId) : [];
+    $('dashStudent').innerHTML = students.map(s => `<option value="${s.id}">${s.name}</option>`).join('');
+    $('selectionInfo').textContent = students.length
+      ? `${state.classes.find(c => c.id === classId)?.name || ''} · ${students[0]?.name || ''}`
+      : 'No students in this class';
   }
 
   function renderManage(){
@@ -538,22 +562,61 @@ window.loadLogIntoForm = loadLogIntoForm;
           <tbody>
             ${state.cycles.map(c => `
               <tr>
-                <td>${c.start_date} → ${c.end_date}</td>
-                <td><button onclick="window.deleteCycle(${c.id})">Delete</button></td>
+                <td>
+                  <div class="grid grid-2">
+                    <input id="cycle_start_${c.id}" type="date" value="${c.start_date}">
+                    <input id="cycle_end_${c.id}" type="date" value="${c.end_date}">
+                  </div>
+                </td>
+                <td>
+                  <div class="row">
+                    <button onclick="window.updateCycle(${c.id})">Save</button>
+                    <button onclick="window.deleteCycle(${c.id})">Delete</button>
+                  </div>
+                </td>
               </tr>
             `).join('')}
           </tbody>
         </table>`
       : `<div class="muted">No cycles yet.</div>`;
 
+    $('classList').innerHTML = state.classes.length
+      ? `<table>
+          <thead><tr><th>Class</th><th></th></tr></thead>
+          <tbody>
+            ${state.classes.map(c => `
+              <tr>
+                <td><input id="class_name_${c.id}" value="${escapeHtml(c.name)}"></td>
+                <td>
+                  <div class="row">
+                    <button onclick="window.updateClass(${c.id})">Save</button>
+                    <button onclick="window.deleteClass(${c.id})">Delete</button>
+                  </div>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>`
+      : `<div class="muted">No classes yet.</div>`;
+
     $('studentList').innerHTML = state.students.length
       ? `<table>
-          <thead><tr><th>Name</th><th></th></tr></thead>
+          <thead><tr><th>Name</th><th>Class</th><th></th></tr></thead>
           <tbody>
             ${state.students.map(s => `
               <tr>
-                <td>${s.name}</td>
-                <td><button onclick="window.deleteStudent(${s.id})">Delete</button></td>
+                <td><input id="student_name_${s.id}" value="${escapeHtml(s.name)}"></td>
+                <td>
+                  <select id="student_class_${s.id}">
+                    ${state.classes.map(c => `<option value="${c.id}" ${Number(s.class_id)===Number(c.id)?'selected':''}>${c.name}</option>`).join('')}
+                  </select>
+                </td>
+                <td>
+                  <div class="row">
+                    <button onclick="window.updateStudent(${s.id})">Save</button>
+                    <button onclick="window.deleteStudent(${s.id})">Delete</button>
+                  </div>
+                </td>
               </tr>
             `).join('')}
           </tbody>
@@ -564,9 +627,12 @@ window.loadLogIntoForm = loadLogIntoForm;
   }
 
   function renderGoalList(){
-    const cycleId = Number($('goalCycle').value);
-    if (!cycleId || !state.students.length){
-      $('goalList').innerHTML = `<div class="muted">Create a cycle and at least one student.</div>`;
+    const cycleId = Number($('goalCycle').value || 0);
+    const classId = Number($('goalClass').value || 0);
+    const students = classId ? getStudentsForClass(classId) : state.students;
+
+    if (!cycleId || !students.length){
+      $('goalList').innerHTML = `<div class="muted">Create a cycle, class, and students first.</div>`;
       return;
     }
 
@@ -575,7 +641,7 @@ window.loadLogIntoForm = loadLogIntoForm;
       <table>
         <thead><tr><th>Student</th><th>Goal topics</th><th></th></tr></thead>
         <tbody>
-          ${state.students.map(s => {
+          ${students.map(s => {
             const existing = goalMap.get(s.id);
             return `
               <tr>
@@ -590,300 +656,507 @@ window.loadLogIntoForm = loadLogIntoForm;
     `;
   }
 
-  async function renderDashboard() {
-  const cycleId = Number($('dashCycle').value);
-  const studentId = Number($('dashStudent').value);
-
-  if (!cycleId || !studentId) {
-    $('dashboardBody').innerHTML = `<div class="muted">Create a cycle and add students.</div>`;
-    return;
+  function escapeHtml(str=''){
+    return String(str)
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'","&#39;");
   }
 
-  const cycle = state.cycles.find(c => c.id === cycleId);
-  const student = state.students.find(s => s.id === studentId);
+  async function renderDashboard() {
+    const cycleId = Number($('dashCycle').value);
+    const classId = Number($('dashClass').value);
+    const studentId = Number($('dashStudent').value);
 
-  const holidayDates = expandHolidayDates(state.holidays);
-  const teachingDays = state.settings?.teaching_days || [0, 1, 3, 4];
-  const cycleLessonDates = lessonDates(cycle.start_date, cycle.end_date, teachingDays, holidayDates);
+    const classObj = state.classes.find(c => c.id === classId);
 
-  const { data: logs } = await supabase
-    .from('daily_logs')
-    .select('*')
-    .eq('student_id', studentId)
-    .gte('log_date', cycle.start_date)
-    .lte('log_date', cycle.end_date)
-    .order('log_date', { ascending: false });
+    if (!cycleId || !classId || !studentId) {
+      $('dashboardBody').innerHTML = `<div class="muted">Create a cycle, class, and student.</div>`;
+      $('selectionInfo').textContent = 'Incomplete selection';
+      return;
+    }
 
-  const { data: goalRow } = await supabase
-    .from('cycle_goals')
-    .select('*')
-    .eq('cycle_id', cycleId)
-    .eq('student_id', studentId)
-    .maybeSingle();
+    const cycle = state.cycles.find(c => c.id === cycleId);
+    const student = state.students.find(s => s.id === studentId);
+    $('selectionInfo').textContent = `${classObj?.name || ''} · ${student?.name || ''}`;
 
-  const goal = goalRow?.goal_topics || 0;
-  const stats = cycleStats(logs || [], cycleLessonDates.length);
-  const loggedDates = new Set((logs || []).map(l => l.log_date));
+    const holidayDates = expandHolidayDates(state.holidays);
+    const teachingDays = state.settings?.teaching_days || [0,1,3,4];
+    const cycleLessonDates = lessonDates(cycle.start_date, cycle.end_date, teachingDays, holidayDates);
 
-  const strip = cycleLessonDates
-    .map(d => `${statusEmoji(d)}${d.slice(5)}${loggedDates.has(d) ? '✓' : ''}`)
-    .join(' ');
+    const { data: logs } = await supabase
+      .from('daily_logs')
+      .select('*')
+      .eq('student_id', studentId)
+      .gte('log_date', cycle.start_date)
+      .lte('log_date', cycle.end_date)
+      .order('log_date', { ascending: false });
 
-  const remaining = Math.max(0, goal - stats.total);
-  const progressActual = goal ? clamp01(Math.min(stats.total, goal) / goal) * 100 : 0;
-  const progressProjected = goal ? clamp01(Math.min(stats.projected, goal) / goal) * 100 : 0;
-  const focusPct = stats.avgFocus === null ? null : clamp01(stats.avgFocus / 5) * 100;
-  const disruptionPct = stats.avgDisruption === null ? null : clamp01(stats.avgDisruption / 5) * 100;
+    const { data: goalRow } = await supabase
+      .from('cycle_goals')
+      .select('*')
+      .eq('cycle_id', cycleId)
+      .eq('student_id', studentId)
+      .maybeSingle();
 
-  const missingDates = cycleLessonDates.filter(d => !loggedDates.has(d));
+    const goal = goalRow?.goal_topics || 0;
+    const stats = cycleStats(logs || [], cycleLessonDates.length);
+    const loggedDates = new Set((logs || []).map(l => l.log_date));
 
-  $('dashboardBody').innerHTML = `
-    <div class="grid grid-2">
-      <div class="card">
-        <h3>${student.name}</h3>
-        <div>Goal: <strong>${goal || '(not set)'}</strong></div>
-        <div>Completed: <strong>${stats.total}</strong></div>
-        <div>Remaining: <strong>${remaining}</strong></div>
-        <div>Pace: <strong>${stats.pace.toFixed(2)}</strong> topics/logged day</div>
-        <div>Projected: <strong>${stats.projected.toFixed(1)}</strong></div>
-      </div>
+    const strip = cycleLessonDates.map(d => `${statusEmoji(d)}${d.slice(5)}${loggedDates.has(d) ? '✓' : ''}`).join(' ');
+    const remaining = Math.max(0, goal - stats.total);
+    const progressActual = goal ? clamp01(Math.min(stats.total, goal) / goal) * 100 : 0;
+    const progressProjected = goal ? clamp01(Math.min(stats.projected, goal) / goal) * 100 : 0;
+    const focusPct = stats.avgFocus === null ? null : clamp01(stats.avgFocus / 5) * 100;
+    const disruptionPct = stats.avgDisruption === null ? null : clamp01(stats.avgDisruption / 5) * 100;
 
-      <div class="card">
-        <div>Progress</div>
-        <div class="progress"><div style="width:${progressActual}%"></div></div>
-        <div class="muted">Actual</div>
+    const missingDates = cycleLessonDates.filter(d => !loggedDates.has(d));
 
-        <div style="height:10px"></div>
-
-        <div class="progress"><div style="width:${progressProjected}%"></div></div>
-        <div class="muted">Projected</div>
-
-        <div style="height:10px"></div>
-
-        <div>Focus</div>
-        ${
-          focusPct === null
-            ? `<div class="muted">Not tracked</div>`
-            : `<div class="progress"><div style="width:${focusPct}%"></div></div>`
-        }
-
-        <div style="height:10px"></div>
-
-        <div>Disruption</div>
-        ${
-          disruptionPct === null
-            ? `<div class="muted">Not tracked</div>`
-            : `<div class="progress"><div style="width:${disruptionPct}%"></div></div>`
-        }
-      </div>
-    </div>
-
-    <div class="card">
-      <h3>Daily report</h3>
-      <div class="lesson-strip">${strip || '<span class="muted">No lesson days in this cycle.</span>'}</div>
-    </div>
-
-    <div class="card">
-      <h3>Add daily report</h3>
-      ${
-        missingDates.length ? `
-        <div class="grid grid-3">
-          <label>Date
-            <select id="newLogDate">
-              ${missingDates.map(d => `<option value="${d}">${d}</option>`).join('')}
-            </select>
-          </label>
-
-          <label>Minutes
-            <input id="newMinutes" type="number" min="0" value="50">
-          </label>
-
-          <label>Topics
-            <input id="newTopics" type="number" min="0" value="0">
-          </label>
-
-          <label>
-            <input type="checkbox" id="trackFocus">
-            Track focus
-          </label>
-
-          <div id="focusWrap" class="hidden">
-            <label>Focus
-              <input id="newFocus" type="range" min="1" max="5" value="3">
-            </label>
-            <div class="muted">Value: <span id="focusValue">3</span></div>
-            <div class="muted">1 = low focus, 5 = high focus</div>
-          </div>
-
-          <label>
-            <input type="checkbox" id="trackDisruption">
-            Track disruption
-          </label>
-
-          <div id="disruptionWrap" class="hidden">
-            <label>Disruption
-              <input id="newDisruption" type="range" min="0" max="5" value="0">
-            </label>
-            <div class="muted">Value: <span id="disruptionValue">0</span></div>
-            <div class="muted">0 = none, 5 = severe</div>
-          </div>
-
-          <label>Note
-            <textarea id="newNote"></textarea>
-          </label>
+    $('dashboardBody').innerHTML = `
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>${student.name}</h3>
+          <div>Goal: <strong>${goal || '(not set)'}</strong></div>
+          <div>Completed: <strong>${stats.total}</strong></div>
+          <div>Remaining: <strong>${remaining}</strong></div>
+          <div>Pace: <strong>${fmtNum(stats.pace)}</strong> topics/present day</div>
+          <div>Projected: <strong>${fmtNum(stats.projected)}</strong></div>
+          <div>Absences: <strong>${stats.absences}</strong></div>
         </div>
 
-        <button style="margin-top:10px;" onclick="window.addLog(${studentId})">Add report</button>
-        ` : `<div class="muted">All lesson days in this cycle already have a report.</div>`
-      }
-    </div>
+        <div class="card">
+          <div>Progress</div>
+          <div class="progress"><div style="width:${progressActual}%"></div></div>
+          <div class="muted">Actual</div>
 
-    <div class="card">
-      <h3>Existing entries</h3>
-      ${
-        logs?.length ? `
-        <table>
-          <thead>
-            <tr><th>Date</th><th>Minutes</th><th>Topics</th><th>Focus</th><th>Disruption</th><th>Note</th><th></th></tr>
-          </thead>
-          <tbody>
-            ${logs.map(l => `
-              <tr>
-                <td>${l.log_date}</td>
-                <td>${l.minutes_in_aleks}</td>
-                <td>${l.topics_completed}</td>
-                <td>${l.focus ?? ''}</td>
-                <td>${l.disruption ?? ''}</td>
-                <td>${l.note || ''}</td>
-                <td>
-                  <button onclick="window.loadLogIntoForm(${l.id})">Edit</button>
-                  <button onclick="window.deleteLog(${l.id})">Delete</button>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-        ` : `<div class="muted">No daily logs yet.</div>`
-      }
-    </div>
-  `;
+          <div style="height:10px"></div>
 
-  const trackFocus = $('trackFocus');
-  const trackDisruption = $('trackDisruption');
-  const focusWrap = $('focusWrap');
-  const disruptionWrap = $('disruptionWrap');
-  const newFocus = $('newFocus');
-  const newDisruption = $('newDisruption');
-  const focusValue = $('focusValue');
-  const disruptionValue = $('disruptionValue');
+          <div class="progress"><div style="width:${progressProjected}%"></div></div>
+          <div class="muted">Projected</div>
 
-  if (trackFocus && focusWrap) {
-    trackFocus.addEventListener('change', () => {
-      focusWrap.classList.toggle('hidden', !trackFocus.checked);
-    });
+          <div style="height:10px"></div>
+
+          <div>Focus</div>
+          ${
+            focusPct === null
+              ? `<div class="muted">Not tracked</div>`
+              : `<div class="progress"><div style="width:${focusPct}%"></div></div>`
+          }
+
+          <div style="height:10px"></div>
+
+          <div>Disruption</div>
+          ${
+            disruptionPct === null
+              ? `<div class="muted">Not tracked</div>`
+              : `<div class="progress"><div style="width:${disruptionPct}%"></div></div>`
+          }
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Daily report</h3>
+        <div class="lesson-strip">${strip || '<span class="muted">No lesson days in this cycle.</span>'}</div>
+      </div>
+
+      <div class="card">
+        <h3>Add / edit daily report</h3>
+        ${
+          missingDates.length || logs?.length ? `
+          <div class="grid grid-3">
+            <label>Date
+              <select id="newLogDate">
+                ${[...new Set([...(missingDates || []), ...(logs || []).map(l => l.log_date)])]
+                  .sort()
+                  .map(d => `<option value="${d}">${d}</option>`).join('')}
+              </select>
+            </label>
+
+            <label>Minutes
+              <input id="newMinutes" type="number" min="0" value="50">
+            </label>
+
+            <label>Topics
+              <input id="newTopics" type="number" min="0" value="0">
+            </label>
+          </div>
+
+          <div class="grid" style="margin-top:12px;">
+            <label>Note
+              <textarea id="newNote"></textarea>
+            </label>
+          </div>
+
+          <div class="grid" style="margin-top:12px;">
+            <label>
+              <input type="radio" name="attendanceStatus" value="present" id="attPresent" checked>
+              Present
+            </label>
+            <label>
+              <input type="radio" name="attendanceStatus" value="absent" id="attAbsent">
+              Absent
+            </label>
+          </div>
+
+          <div class="grid" style="margin-top:12px;">
+            <label>
+              <input type="checkbox" id="trackFocus">
+              Track focus
+            </label>
+
+            <div id="focusWrap" class="hidden">
+              <label>Focus
+                <input id="newFocus" type="range" min="1" max="5" value="3">
+              </label>
+              <div class="muted">Value: <span id="focusValue">3</span></div>
+              <div class="muted">1 = low focus, 5 = high focus</div>
+            </div>
+
+            <label>
+              <input type="checkbox" id="trackDisruption">
+              Track disruption
+            </label>
+
+            <div id="disruptionWrap" class="hidden">
+              <label>Disruption
+                <input id="newDisruption" type="range" min="0" max="5" value="0">
+              </label>
+              <div class="muted">Value: <span id="disruptionValue">0</span></div>
+              <div class="muted">0 = none, 5 = severe</div>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px;">
+            <button onclick="window.addLog(${studentId})">Save report</button>
+            <span class="muted tiny">Absent days are bypassed in performance calculations.</span>
+          </div>
+          ` : `<div class="muted">No report dates available.</div>`
+        }
+      </div>
+
+      <div class="card">
+        <h3>Existing entries</h3>
+        ${
+          logs?.length ? `
+          <table>
+            <thead>
+              <tr><th>Date</th><th>Status</th><th>Minutes</th><th>Topics</th><th>Focus</th><th>Disruption</th><th>Note</th><th></th></tr>
+            </thead>
+            <tbody>
+              ${logs.map(l => `
+                <tr>
+                  <td>${l.log_date}</td>
+                  <td>${l.attendance_status}</td>
+                  <td>${l.minutes_in_aleks}</td>
+                  <td>${l.topics_completed}</td>
+                  <td>${l.focus ?? ''}</td>
+                  <td>${l.disruption ?? ''}</td>
+                  <td>${l.note || ''}</td>
+                  <td>
+                    <button onclick="window.loadLogIntoForm(${l.id})">Edit</button>
+                    <button onclick="window.deleteLog(${l.id})">Delete</button>
+                  </td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+          ` : `<div class="muted">No daily logs yet.</div>`
+        }
+      </div>
+    `;
+
+    const trackFocus = $('trackFocus');
+    const trackDisruption = $('trackDisruption');
+    const focusWrap = $('focusWrap');
+    const disruptionWrap = $('disruptionWrap');
+    const newFocus = $('newFocus');
+    const newDisruption = $('newDisruption');
+    const focusValue = $('focusValue');
+    const disruptionValue = $('disruptionValue');
+    const attPresent = $('attPresent');
+    const attAbsent = $('attAbsent');
+
+    if (trackFocus && focusWrap) {
+      trackFocus.addEventListener('change', () => {
+        focusWrap.classList.toggle('hidden', !trackFocus.checked);
+      });
+    }
+
+    if (trackDisruption && disruptionWrap) {
+      trackDisruption.addEventListener('change', () => {
+        disruptionWrap.classList.toggle('hidden', !trackDisruption.checked);
+      });
+    }
+
+    if (newFocus && focusValue) {
+      newFocus.addEventListener('input', () => {
+        focusValue.textContent = newFocus.value;
+      });
+    }
+
+    if (newDisruption && disruptionValue) {
+      newDisruption.addEventListener('input', () => {
+        disruptionValue.textContent = newDisruption.value;
+      });
+    }
+
+    if (attPresent && attAbsent) {
+      const syncAttendanceUI = () => {
+        const isAbsent = attAbsent.checked;
+        $('newMinutes').disabled = isAbsent;
+        $('newTopics').disabled = isAbsent;
+        $('trackFocus').disabled = isAbsent;
+        $('trackDisruption').disabled = isAbsent;
+        if (isAbsent) {
+          $('newMinutes').value = 0;
+          $('newTopics').value = 0;
+          $('trackFocus').checked = false;
+          $('trackDisruption').checked = false;
+          focusWrap.classList.add('hidden');
+          disruptionWrap.classList.add('hidden');
+        }
+      };
+      attPresent.addEventListener('change', syncAttendanceUI);
+      attAbsent.addEventListener('change', syncAttendanceUI);
+      syncAttendanceUI();
+    }
   }
 
-  if (trackDisruption && disruptionWrap) {
-    trackDisruption.addEventListener('change', () => {
-      disruptionWrap.classList.toggle('hidden', !trackDisruption.checked);
-    });
-  }
+  async function renderOverview() {
+    const cycleId = Number($('overviewCycle').value || 0);
+    const classId = Number($('overviewClass').value || 0);
+    const canvas = $('overviewCanvas');
+    const tableWrap = $('overviewTable');
+    if (!canvas || !tableWrap) return;
 
-  if (newFocus && focusValue) {
-    newFocus.addEventListener('input', () => {
-      focusValue.textContent = newFocus.value;
-    });
-  }
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  if (newDisruption && disruptionValue) {
-    newDisruption.addEventListener('input', () => {
-      disruptionValue.textContent = newDisruption.value;
-    });
-  }
-}
-
-let authBusy = false;
-
-async function signIn() {
-  if (authBusy) return;
-
-  const btn = $('signInBtn');
-  const msg = $('authMsg');
-
-  try {
-    authBusy = true;
-    btn.disabled = true;
-    btn.textContent = 'Signing in...';
-    msg.textContent = '';
-
-    const email = $('email').value.trim();
-    const password = $('password').value;
-
-    if (!email || !password) {
-      msg.textContent = 'Enter email and password.';
+    if (!cycleId || !classId) {
+      tableWrap.innerHTML = `<div class="muted">Select a cycle and class.</div>`;
       return;
     }
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const cycle = state.cycles.find(c => c.id === cycleId);
+    const classStudents = getStudentsForClass(classId);
 
-    if (error) {
-      msg.textContent = error.message;
+    if (!cycle || !classStudents.length) {
+      tableWrap.innerHTML = `<div class="muted">No students in this class.</div>`;
       return;
     }
 
-    msg.textContent = 'Signed in.';
-  } catch (err) {
-    console.error('signIn failed', err);
-    msg.textContent = 'Sign in failed.';
-  } finally {
-    authBusy = false;
-    btn.disabled = false;
-    btn.textContent = 'Sign in';
-  }
-}
+    const holidayDates = expandHolidayDates(state.holidays);
+    const teachingDays = state.settings?.teaching_days || [0,1,3,4];
+    const cycleLessonDates = lessonDates(cycle.start_date, cycle.end_date, teachingDays, holidayDates);
 
-async function signUp() {
-  if (authBusy) return;
+    const studentIds = classStudents.map(s => s.id);
+    const [{ data: logs }, { data: goals }] = await Promise.all([
+      supabase.from('daily_logs')
+        .select('*')
+        .in('student_id', studentIds)
+        .gte('log_date', cycle.start_date)
+        .lte('log_date', cycle.end_date),
+      supabase.from('cycle_goals')
+        .select('*')
+        .eq('cycle_id', cycleId)
+        .in('student_id', studentIds)
+    ]);
 
-  const btn = $('signUpBtn');
-  const msg = $('authMsg');
-
-  try {
-    authBusy = true;
-    btn.disabled = true;
-    btn.textContent = 'Creating...';
-    msg.textContent = '';
-
-    const email = $('email').value.trim();
-    const password = $('password').value;
-
-    if (!email || !password) {
-      msg.textContent = 'Enter email and password.';
-      return;
-    }
-
-    const redirectTo = window.location.origin + window.location.pathname;
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectTo
-      }
+    const goalMap = new Map((goals || []).map(g => [g.student_id, g.goal_topics]));
+    const rows = classStudents.map(s => {
+      const studentLogs = (logs || []).filter(l => l.student_id === s.id);
+      const stats = cycleStats(studentLogs, cycleLessonDates.length);
+      const goal = goalMap.get(s.id) || 0;
+      return {
+        name: s.name,
+        goal,
+        current: stats.total,
+        projected: stats.projected
+      };
     });
 
-    msg.textContent = error
-      ? error.message
-      : 'Account created. Check email if confirmation is enabled.';
-  } catch (err) {
-    console.error('signUp failed', err);
-    msg.textContent = 'Account creation failed.';
-  } finally {
-    authBusy = false;
-    btn.disabled = false;
-    btn.textContent = 'Create account';
+    drawOverviewChart(canvas, rows);
+
+    tableWrap.innerHTML = `
+      <table>
+        <thead><tr><th>Student</th><th>Goal</th><th>Current</th><th>Projected</th></tr></thead>
+        <tbody>
+          ${rows.map(r => `
+            <tr>
+              <td>${r.name}</td>
+              <td>${r.goal}</td>
+              <td>${fmtNum(r.current)}</td>
+              <td>${fmtNum(r.projected)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
   }
-}
+
+  function drawOverviewChart(canvas, rows) {
+    const ctx = canvas.getContext('2d');
+    const w = canvas.width;
+    const h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+
+    const padL = 70;
+    const padR = 30;
+    const padT = 30;
+    const padB = 90;
+    const chartW = w - padL - padR;
+    const chartH = h - padT - padB;
+
+    const maxVal = Math.max(10, ...rows.flatMap(r => [r.goal, r.current, r.projected]).map(Number));
+    const stepX = rows.length ? chartW / rows.length : chartW;
+
+    ctx.strokeStyle = '#d7e3f0';
+    ctx.lineWidth = 1;
+
+    for (let i = 0; i <= 5; i++) {
+      const y = padT + (chartH * i / 5);
+      ctx.beginPath();
+      ctx.moveTo(padL, y);
+      ctx.lineTo(w - padR, y);
+      ctx.stroke();
+
+      const val = Math.round(maxVal - (maxVal * i / 5));
+      ctx.fillStyle = '#5d7297';
+      ctx.font = '12px Arial';
+      ctx.fillText(String(val), 20, y + 4);
+    }
+
+    rows.forEach((r, i) => {
+      const xCenter = padL + stepX * i + stepX / 2;
+
+      const toY = (v) => padT + chartH - (Number(v || 0) / maxVal) * chartH;
+
+      const currentY = toY(r.current);
+      const projectedY = toY(r.projected);
+      const goalY = toY(r.goal);
+
+      ctx.fillStyle = '#11b7d8';
+      ctx.fillRect(xCenter - 26, currentY, 18, padT + chartH - currentY);
+
+      ctx.fillStyle = '#59c36a';
+      ctx.fillRect(xCenter + 8, projectedY, 18, padT + chartH - projectedY);
+
+      ctx.strokeStyle = '#2457a6';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(xCenter - 30, goalY);
+      ctx.lineTo(xCenter + 30, goalY);
+      ctx.stroke();
+
+      ctx.fillStyle = '#133a7c';
+      ctx.font = '12px Arial';
+      const label = r.name.length > 12 ? r.name.slice(0, 12) + '…' : r.name;
+      ctx.save();
+      ctx.translate(xCenter, h - 50);
+      ctx.rotate(-0.35);
+      ctx.fillText(label, -20, 0);
+      ctx.restore();
+    });
+
+    ctx.fillStyle = '#133a7c';
+    ctx.font = 'bold 14px Arial';
+    ctx.fillText('Current', w - 250, 25);
+    ctx.fillText('Projected', w - 170, 25);
+    ctx.fillText('Goal', w - 70, 25);
+
+    ctx.fillStyle = '#11b7d8';
+    ctx.fillRect(w - 310, 14, 18, 10);
+
+    ctx.fillStyle = '#59c36a';
+    ctx.fillRect(w - 215, 14, 18, 10);
+
+    ctx.strokeStyle = '#2457a6';
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(w - 110, 19);
+    ctx.lineTo(w - 80, 19);
+    ctx.stroke();
+  }
+
+  let authBusy = false;
+  let lastUserId = null;
+
+  async function signIn() {
+    if (authBusy) return;
+    const btn = $('signInBtn');
+    const msg = $('authMsg');
+
+    try {
+      authBusy = true;
+      btn.disabled = true;
+      btn.textContent = 'Signing in...';
+      msg.textContent = '';
+
+      const email = $('email').value.trim();
+      const password = $('password').value;
+
+      if (!email || !password) {
+        msg.textContent = 'Enter email and password.';
+        return;
+      }
+
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        msg.textContent = error.message;
+        return;
+      }
+      msg.textContent = 'Signed in.';
+    } catch (err) {
+      console.error('signIn failed', err);
+      msg.textContent = 'Sign in failed.';
+    } finally {
+      authBusy = false;
+      btn.disabled = false;
+      btn.textContent = 'Sign in';
+    }
+  }
+
+  async function signUp() {
+    if (authBusy) return;
+    const btn = $('signUpBtn');
+    const msg = $('authMsg');
+
+    try {
+      authBusy = true;
+      btn.disabled = true;
+      btn.textContent = 'Creating...';
+      msg.textContent = '';
+
+      const email = $('email').value.trim();
+      const password = $('password').value;
+
+      if (!email || !password) {
+        msg.textContent = 'Enter email and password.';
+        return;
+      }
+
+      const redirectTo = window.location.origin + window.location.pathname;
+
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: redirectTo }
+      });
+
+      msg.textContent = error
+        ? error.message
+        : 'Account created. Check email if confirmation is enabled.';
+    } catch (err) {
+      console.error('signUp failed', err);
+      msg.textContent = 'Account creation failed.';
+    } finally {
+      authBusy = false;
+      btn.disabled = false;
+      btn.textContent = 'Create account';
+    }
+  }
 
   async function signOut(){
     await supabase.auth.signOut();
@@ -891,8 +1164,10 @@ async function signUp() {
 
   async function saveTeachingDays(){
     const teaching_days = dayChecks().filter(x => x.checked).map(x => Number(x.value)).sort((a,b)=>a-b);
-    const payload = { teacher_id: state.user.id, teaching_days };
-    const { error } = await supabase.from('teacher_settings').upsert(payload);
+    const { error } = await supabase.from('teacher_settings').upsert({
+      teacher_id: state.user.id,
+      teaching_days
+    });
     if (error) return alert(error.message);
     await loadAll();
   }
@@ -919,77 +1194,208 @@ async function signUp() {
     await loadAll();
   }
 
+  async function updateCycle(id){
+    const start_date = $(`cycle_start_${id}`).value;
+    const end_date = $(`cycle_end_${id}`).value;
+    if (!start_date || !end_date) return alert('Set both cycle dates.');
+    const { error } = await supabase.from('cycles').update({ start_date, end_date }).eq('id', id);
+    if (error) return alert(error.message);
+    await loadAll();
+  }
+
+  async function addClass(){
+    const name = $('newClassName').value.trim();
+    if (!name) return alert('Enter a class name.');
+    const { error } = await supabase.from('classes').insert({ teacher_id: state.user.id, name });
+    if (error) return alert(error.message);
+    $('newClassName').value = '';
+    await loadAll();
+  }
+
+  async function updateClass(id){
+    const name = $(`class_name_${id}`).value.trim();
+    if (!name) return alert('Enter a class name.');
+    const { error } = await supabase.from('classes').update({ name }).eq('id', id);
+    if (error) return alert(error.message);
+    await loadAll();
+  }
+
   async function addStudent(){
     const name = $('newStudentName').value.trim();
+    const class_id = Number($('newStudentClass').value || 0);
     if (!name) return alert('Enter a student name.');
-    const { error } = await supabase.from('students').insert({ teacher_id: state.user.id, name });
+    if (!class_id) return alert('Select a class.');
+    const { error } = await supabase.from('students').insert({ teacher_id: state.user.id, name, class_id });
     if (error) return alert(error.message);
     $('newStudentName').value = '';
     await loadAll();
   }
 
+  async function updateStudent(id){
+    const name = $(`student_name_${id}`).value.trim();
+    const class_id = Number($(`student_class_${id}`).value || 0);
+    if (!name) return alert('Enter a student name.');
+    if (!class_id) return alert('Select a class.');
+    const { error } = await supabase.from('students').update({ name, class_id }).eq('id', id);
+    if (error) return alert(error.message);
+    await loadAll();
+  }
+
   async function saveGoal(cycleId, studentId){
-    const goal_topics = Number(document.getElementById(`goal_${studentId}`).value || 0);
+    const goal_topics = Number($(`goal_${studentId}`).value || 0);
     const { error } = await supabase.from('cycle_goals').upsert({
+      teacher_id: state.user.id,
       cycle_id: cycleId,
       student_id: studentId,
-      teacher_id: state.user.id,
       goal_topics
     });
     if (error) return alert(error.message);
     await loadGoals();
     renderGoalList();
     await renderDashboard();
+    await renderOverview();
   }
 
-async function addLog(studentId) {
-  const log_date = $('newLogDate').value;
-  const minutes_in_aleks = Number($('newMinutes').value || 0);
-  const topics_completed = Number($('newTopics').value || 0);
-  const note = $('newNote').value || '';
+  async function applyBulkGoal(){
+    const cycleId = Number($('goalCycle').value || 0);
+    const classId = Number($('goalClass').value || 0);
+    const goal_topics = Number($('bulkGoalValue').value || 0);
+    if (!cycleId || !classId) return alert('Select cycle and class.');
 
-  const focusTracked = $('trackFocus')?.checked || false;
-  const disruptionTracked = $('trackDisruption')?.checked || false;
+    const students = getStudentsForClass(classId);
+    if (!students.length) return alert('No students in this class.');
 
-  const focus = focusTracked ? Number($('newFocus').value) : null;
-  const disruption = disruptionTracked ? Number($('newDisruption').value) : null;
+    const rows = students.map(s => ({
+      teacher_id: state.user.id,
+      cycle_id: cycleId,
+      student_id: s.id,
+      goal_topics
+    }));
 
-  if (
-    minutes_in_aleks === 0 &&
-    topics_completed === 0 &&
-    focus === null &&
-    disruption === null &&
-    note.trim() === ''
-  ) {
-    alert('This report is blank. Enter some information first.');
-    return;
+    const { error } = await supabase.from('cycle_goals').upsert(rows);
+    if (error) return alert(error.message);
+
+    await loadGoals();
+    renderGoalList();
+    await renderDashboard();
+    await renderOverview();
   }
 
-  const payload = {
-    teacher_id: state.user.id,
-    student_id: studentId,
-    log_date,
-    minutes_in_aleks,
-    topics_completed,
-    focus,
-    disruption,
-    dedication: 0,
-    note
-  };
+  async function addLog(studentId) {
+    const log_date = $('newLogDate').value;
+    const attendance_status = document.querySelector('input[name="attendanceStatus"]:checked')?.value || 'present';
+    const note = $('newNote').value || '';
 
-  const { error } = await supabase
-    .from('daily_logs')
-    .upsert(payload, {
-      onConflict: 'teacher_id,student_id,log_date'
-    });
+    let minutes_in_aleks = Number($('newMinutes').value || 0);
+    let topics_completed = Number($('newTopics').value || 0);
 
-  if (error) {
-    alert(error.message);
-    return;
+    const focusTracked = $('trackFocus')?.checked || false;
+    const disruptionTracked = $('trackDisruption')?.checked || false;
+
+    let focus = focusTracked ? Number($('newFocus').value) : null;
+    let disruption = disruptionTracked ? Number($('newDisruption').value) : null;
+
+    if (attendance_status === 'absent') {
+      minutes_in_aleks = 0;
+      topics_completed = 0;
+      focus = null;
+      disruption = null;
+    }
+
+    if (
+      attendance_status === 'present' &&
+      minutes_in_aleks === 0 &&
+      topics_completed === 0 &&
+      focus === null &&
+      disruption === null &&
+      note.trim() === ''
+    ) {
+      alert('This report is blank. Enter some information first, or mark the student absent.');
+      return;
+    }
+
+    const payload = {
+      teacher_id: state.user.id,
+      student_id: studentId,
+      log_date,
+      attendance_status,
+      minutes_in_aleks,
+      topics_completed,
+      focus,
+      disruption,
+      dedication: 0,
+      note
+    };
+
+    const { error } = await supabase
+      .from('daily_logs')
+      .upsert(payload, {
+        onConflict: 'teacher_id,student_id,log_date'
+      });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    await loadAll();
+
+    const classId = Number($('dashClass').value || 0);
+    const students = getStudentsForClass(classId);
+    if (students.some(s => s.id === studentId)) {
+      $('dashStudent').value = String(studentId);
+      await renderDashboard();
+    }
   }
 
-  await loadAll();
-}
+  async function loadLogIntoForm(logId) {
+    const { data, error } = await supabase
+      .from('daily_logs')
+      .select('*')
+      .eq('id', logId)
+      .maybeSingle();
+
+    if (error || !data) {
+      alert(error?.message || 'Could not load log.');
+      return;
+    }
+
+    $('newLogDate').value = data.log_date;
+    $('newMinutes').value = data.minutes_in_aleks;
+    $('newTopics').value = data.topics_completed;
+    $('newNote').value = data.note || '';
+
+    $('attPresent').checked = data.attendance_status !== 'absent';
+    $('attAbsent').checked = data.attendance_status === 'absent';
+    $('attAbsent').dispatchEvent(new Event('change'));
+
+    const trackFocus = $('trackFocus');
+    const trackDisruption = $('trackDisruption');
+    const focusWrap = $('focusWrap');
+    const disruptionWrap = $('disruptionWrap');
+    const focusValue = $('focusValue');
+    const disruptionValue = $('disruptionValue');
+
+    if (trackFocus && focusWrap) {
+      trackFocus.checked = data.focus !== null && data.focus !== undefined;
+      focusWrap.classList.toggle('hidden', !trackFocus.checked);
+    }
+
+    if (trackDisruption && disruptionWrap) {
+      trackDisruption.checked = data.disruption !== null && data.disruption !== undefined;
+      disruptionWrap.classList.toggle('hidden', !trackDisruption.checked);
+    }
+
+    if ($('newFocus') && data.focus !== null && data.focus !== undefined) {
+      $('newFocus').value = data.focus;
+      if (focusValue) focusValue.textContent = data.focus;
+    }
+
+    if ($('newDisruption') && data.disruption !== null && data.disruption !== undefined) {
+      $('newDisruption').value = data.disruption;
+      if (disruptionValue) disruptionValue.textContent = data.disruption;
+    }
+  }
 
   async function deleteHoliday(id){
     if (!confirm('Delete this holiday range?')) return;
@@ -1002,6 +1408,14 @@ async function addLog(studentId) {
     if (!confirm('Delete this cycle?')) return;
     await supabase.from('cycle_goals').delete().eq('cycle_id', id);
     const { error } = await supabase.from('cycles').delete().eq('id', id);
+    if (error) return alert(error.message);
+    await loadAll();
+  }
+
+  async function deleteClass(id){
+    if (!confirm('Delete this class? Students in this class will lose their class assignment.')) return;
+    await supabase.from('students').update({ class_id: null }).eq('class_id', id);
+    const { error } = await supabase.from('classes').delete().eq('id', id);
     if (error) return alert(error.message);
     await loadAll();
   }
@@ -1019,83 +1433,99 @@ async function addLog(studentId) {
     if (!confirm('Delete this log entry?')) return;
     const { error } = await supabase.from('daily_logs').delete().eq('id', id);
     if (error) return alert(error.message);
-    await renderDashboard();
+    await loadAll();
   }
 
   function bindTabs(){
     document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', async () => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         btn.classList.add('active');
-        ['dashboardTab', 'manageTab'].forEach(id => $(id).classList.add('hidden'));
+        ['dashboardTab', 'manageTab', 'overviewTab'].forEach(id => $(id).classList.add('hidden'));
         $(btn.dataset.tab).classList.remove('hidden');
+        if (btn.dataset.tab === 'overviewTab') await renderOverview();
       });
     });
   }
-  
-let lastUserId = null;
 
-async function updateUIFromSession(session) {
-  state.user = session?.user || null;
+  async function updateUIFromSession(session) {
+    state.user = session?.user || null;
 
-  const authView = $('authView');
-  const appView = $('appView');
-  const teacherInfo = $('teacherInfo');
+    const authView = $('authView');
+    const appView = $('appView');
+    const teacherInfo = $('teacherInfo');
 
-  if (state.user) {
-    authView.classList.add('hidden');
-    appView.classList.remove('hidden');
-    teacherInfo.textContent = state.user.email;
+    if (state.user) {
+      authView.classList.add('hidden');
+      appView.classList.remove('hidden');
+      teacherInfo.textContent = state.user.email;
 
-    if (lastUserId !== state.user.id) {
-      lastUserId = state.user.id;
-      await loadAll();
+      if (lastUserId !== state.user.id) {
+        lastUserId = state.user.id;
+        await loadAll();
+      }
+    } else {
+      lastUserId = null;
+      authView.classList.remove('hidden');
+      appView.classList.add('hidden');
+      teacherInfo.textContent = '';
     }
-  } else {
-    lastUserId = null;
-    authView.classList.remove('hidden');
-    appView.classList.add('hidden');
-    teacherInfo.textContent = '';
   }
-}
 
-async function initAuth() {
-  const { data, error } = await supabase.auth.getSession();
-  if (error) console.error(error);
-  await updateUIFromSession(data?.session || null);
+  async function initAuth() {
+    const { data, error } = await supabase.auth.getSession();
+    if (error) console.error(error);
+    await updateUIFromSession(data?.session || null);
 
-  supabase.auth.onAuthStateChange(async (event, session) => {
-    console.log('auth event:', event);
-    await updateUIFromSession(session);
+    supabase.auth.onAuthStateChange(async (_event, session) => {
+      await updateUIFromSession(session);
+    });
+  }
+
+  $('authForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    await signIn();
   });
-}
-
-
 
   $('signUpBtn').addEventListener('click', signUp);
   $('logoutBtn').addEventListener('click', signOut);
   $('saveDaysBtn').addEventListener('click', saveTeachingDays);
   $('addHolidayBtn').addEventListener('click', addHoliday);
   $('addCycleBtn').addEventListener('click', addCycle);
+  $('addClassBtn').addEventListener('click', addClass);
   $('addStudentBtn').addEventListener('click', addStudent);
+  $('applyBulkGoalBtn').addEventListener('click', applyBulkGoal);
+
   $('dashCycle').addEventListener('change', renderDashboard);
+  $('dashClass').addEventListener('change', async () => {
+    populateStudentSelector();
+    await renderDashboard();
+  });
   $('dashStudent').addEventListener('change', renderDashboard);
+
   $('goalCycle').addEventListener('change', async () => {
     await loadGoals();
     renderGoalList();
   });
+  $('goalClass').addEventListener('change', renderGoalList);
+
+  $('overviewCycle').addEventListener('change', renderOverview);
+  $('overviewClass').addEventListener('change', renderOverview);
 
   window.saveGoal = saveGoal;
   window.addLog = addLog;
   window.deleteHoliday = deleteHoliday;
   window.deleteCycle = deleteCycle;
+  window.deleteClass = deleteClass;
   window.deleteStudent = deleteStudent;
   window.deleteLog = deleteLog;
   window.loadLogIntoForm = loadLogIntoForm;
+  window.updateCycle = updateCycle;
+  window.updateClass = updateClass;
+  window.updateStudent = updateStudent;
 
- bindTabs();
-await initAuth();
- 
+  bindTabs();
+  await initAuth();
 </script>
 </body>
 </html>
