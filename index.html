@@ -6,18 +6,20 @@
   <title>ALEKS Calendar</title>
   <style>
     :root{
-      --bg:#0f1115;
-      --panel:#171b22;
-      --panel2:#1d2330;
-      --text:#eef2f7;
-      --muted:#aab3c2;
-      --line:#2a3242;
-      --accent:#5da8ff;
-      --good:#2ecc71;
-      --warn:#f1c40f;
-      --bad:#e74c3c;
-      --today:#3498db;
-    }
+  --bg: #eef3f8;
+  --panel: #ffffff;
+  --panel2: #f5f9fc;
+  --text: #133a7c;
+  --muted: #5d7297;
+  --line: #d7e3f0;
+  --accent: #11b7d8;
+  --accent-2: #2457a6;
+  --good: #59c36a;
+  --warn: #f2c94c;
+  --bad: #e76f51;
+  --today: #11b7d8;
+  --shadow: 0 8px 24px rgba(19, 58, 124, 0.08);
+}
       
 input,
 textarea,
@@ -31,15 +33,16 @@ select {
     *{box-sizing:border-box}
     body{
       margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      background:var(--bg);
-      color:var(--text);
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef4fb 0%, #f8fbfe 100%);
+      color: var(--text);
     }
     .wrap{max-width:1300px;margin:0 auto;padding:20px}
     .topbar,.panel,.card{
-      background:var(--panel);
-      border:1px solid var(--line);
-      border-radius:14px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
     }
     .topbar{
       display:flex;justify-content:space-between;align-items:center;
@@ -54,24 +57,34 @@ select {
     .sidebar h3,.content h2{margin-top:0}
     .content{display:grid;gap:16px}
     .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
-    .tab-btn,button{
-      border:1px solid var(--line);
-      background:var(--panel2);
-      color:var(--text);
-      border-radius:10px;
-      padding:10px 14px;
-      cursor:pointer;
+    .tab-btn, button{
+        border: 1px solid var(--line);
+        background: var(--panel2);
+        color: var(--accent-2);
+        border-radius: 12px;
+        padding: 10px 14px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.2s ease;
+      }
+
+    button:hover, .tab-btn:hover{
+      background: #eaf5fb;
+      border-color: #b9dcef;
     }
-    .tab-btn.active{outline:2px solid var(--accent)}
-    input,select,textarea{
-      width:100%;
-      padding:10px 12px;
-      background:#10141b;
-      color:var(--text);
-      border:1px solid var(--line);
-      border-radius:10px;
-      margin-top:6px;
+
+    .tab-btn.active{
+      background: var(--accent-2);
+      color: #ffffff;
+      border-color: var(--accent-2);
+      outline: none;
     }
+
+input:focus, select:focus, textarea:focus{
+  outline:none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(17,183,216,0.15);
+}
 
     option {
   background: #ffffff;
@@ -99,12 +112,23 @@ select {
       vertical-align:top;
     }
     .progress{
-      height:14px;background:#0e1218;border-radius:999px;overflow:hidden;border:1px solid var(--line)
-    }
-    .progress > div{height:100%;background:var(--accent)}
+  height:14px;
+  background:#edf3f8;
+  border-radius:999px;
+  overflow:hidden;
+  border:1px solid #d9e7f1;
+}
+.progress > div{
+  height:100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
     .badge{display:inline-block;padding:4px 8px;border-radius:999px;border:1px solid var(--line);font-size:12px}
     .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .lesson-strip{line-height:2}
+    .lesson-strip{
+  line-height:2.2;
+  font-weight:600;
+  color: var(--accent-2);
+}
     .status-good{color:var(--good)}
     .status-bad{color:var(--bad)}
     .status-today{color:var(--today)}
@@ -113,6 +137,13 @@ select {
       .layout{grid-template-columns:1fr}
       .grid-2,.grid-3{grid-template-columns:1fr}
     }
+    
+    input[type="range"]{
+  accent-color: var(--accent);
+  padding: 0;
+  background: transparent;
+  border: none;
+}
   </style>
 </head>
 <body>
@@ -141,7 +172,7 @@ select {
   <div id="appView" class="hidden">
     <div class="topbar">
       <div>
-        <strong>ALEKS Calendar</strong>
+        <strong style="font-size:1.4rem; letter-spacing:0.2px;">ALEKS Calendar</strong>
         <div class="muted" id="teacherInfo"></div>
       </div>
       <button id="logoutBtn">Sign out</button>
@@ -253,9 +284,18 @@ select {
 
   const $ = (id) => document.getElementById(id);
   const dayChecks = () => [...document.querySelectorAll('.dayCheck')];
-  const formatDate = (d) => new Date(d + 'T00:00:00').toISOString().slice(0,10);
-  const parseDate = (d) => new Date(d + 'T00:00:00');
-  const todayIso = () => new Date().toISOString().slice(0,10);
+  function parseDateLocal(isoDate) {
+  const [y, m, d] = isoDate.split('-').map(Number);
+  return new Date(y, m - 1, d);
+}
+
+function formatLocalDate(dateObj) {
+  const y = dateObj.getFullYear();
+  const m = String(dateObj.getMonth() + 1).padStart(2, '0');
+  const d = String(dateObj.getDate()).padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+  const todayIso = () => formatLocalDate(new Date());
 
   function clamp01(x){ return Math.max(0, Math.min(1, x)); }
   function safeDiv(n,d){ return d > 0 ? n / d : 0; }
@@ -265,45 +305,45 @@ $('authForm').addEventListener('submit', async (e) => {
   await signIn();
 });
 
-  function expandHolidayDates(ranges){
-    const out = new Set();
-    for (const r of ranges){
-      let d = parseDate(r.start_date);
-      const end = parseDate(r.end_date);
-      while (d <= end){
-        out.add(d.toISOString().slice(0,10));
-        d.setDate(d.getDate() + 1);
-      }
-    }
-    return [...out].sort();
-  }
-
-  function lessonDates(startIso, endIso, teachingDays, holidayDates){
-    const holidays = new Set(holidayDates);
-    const out = [];
-    let d = parseDate(startIso);
-    const end = parseDate(endIso);
-    while (d <= end){
-      const iso = d.toISOString().slice(0,10);
-      const jsDay = (d.getDay() + 6) % 7;
-      if (teachingDays.includes(jsDay) && !holidays.has(iso)) out.push(iso);
+  function expandHolidayDates(ranges) {
+  const out = new Set();
+  for (const r of ranges) {
+    let d = parseDateLocal(r.start_date);
+    const end = parseDateLocal(r.end_date);
+    while (d <= end) {
+      out.add(formatLocalDate(d));
       d.setDate(d.getDate() + 1);
     }
-    return out;
   }
+  return [...out].sort();
+}
 
-  function teachingDatesIncludingHolidays(startIso, endIso, teachingDays){
-    const out = [];
-    let d = parseDate(startIso);
-    const end = parseDate(endIso);
-    while (d <= end){
-      const iso = d.toISOString().slice(0,10);
-      const jsDay = (d.getDay() + 6) % 7;
-      if (teachingDays.includes(jsDay)) out.push(iso);
-      d.setDate(d.getDate() + 1);
-    }
-    return out;
+function lessonDates(startIso, endIso, teachingDays, holidayDates) {
+  const holidays = new Set(holidayDates);
+  const out = [];
+  let d = parseDateLocal(startIso);
+  const end = parseDateLocal(endIso);
+  while (d <= end) {
+    const iso = formatLocalDate(d);
+    const jsDay = (d.getDay() + 6) % 7;
+    if (teachingDays.includes(jsDay) && !holidays.has(iso)) out.push(iso);
+    d.setDate(d.getDate() + 1);
   }
+  return out;
+}
+
+function teachingDatesIncludingHolidays(startIso, endIso, teachingDays) {
+  const out = [];
+  let d = parseDateLocal(startIso);
+  const end = parseDateLocal(endIso);
+  while (d <= end) {
+    const iso = formatLocalDate(d);
+    const jsDay = (d.getDay() + 6) % 7;
+    if (teachingDays.includes(jsDay)) out.push(iso);
+    d.setDate(d.getDate() + 1);
+  }
+  return out;
+}
 
 
 
@@ -314,15 +354,25 @@ $('authForm').addEventListener('submit', async (e) => {
     return '<span class="status-good">🟩</span>';
   }
 
-  function cycleStats(logs, lessonDayCount){
-    const total = logs.reduce((a,b) => a + (b.topics_completed || 0), 0);
-    const distinctDays = new Set(logs.map(x => x.log_date)).size;
-    const pace = safeDiv(total, distinctDays);
-    const projected = pace * lessonDayCount;
-    const avgFocus = logs.length ? logs.reduce((a,b)=>a + (b.focus || 0),0) / logs.length : 0;
-    const avgDisruption = logs.length ? logs.reduce((a,b)=>a + (b.disruption || 0),0) / logs.length : 0;
-    return { total, distinctDays, pace, projected, avgFocus, avgDisruption };
-  }
+  function cycleStats(logs, lessonDayCount) {
+  const total = logs.reduce((a, b) => a + (b.topics_completed || 0), 0);
+  const distinctDays = new Set(logs.map(x => x.log_date)).size;
+  const pace = safeDiv(total, distinctDays);
+  const projected = pace * lessonDayCount;
+
+  const focusLogs = logs.filter(x => x.focus !== null && x.focus !== undefined);
+  const disruptionLogs = logs.filter(x => x.disruption !== null && x.disruption !== undefined);
+
+  const avgFocus = focusLogs.length
+    ? focusLogs.reduce((a, b) => a + Number(b.focus), 0) / focusLogs.length
+    : null;
+
+  const avgDisruption = disruptionLogs.length
+    ? disruptionLogs.reduce((a, b) => a + Number(b.disruption), 0) / disruptionLogs.length
+    : null;
+
+  return { total, distinctDays, pace, projected, avgFocus, avgDisruption };
+}
 
   async function ensureTeacherProfile(){
     const { data: existing } = await supabase
@@ -407,7 +457,7 @@ $('authForm').addEventListener('submit', async (e) => {
     : `<div class="muted">No holiday ranges set.</div>`;
 }
 
-  async function loadLogIntoForm(logId) {
+async function loadLogIntoForm(logId) {
   const { data, error } = await supabase
     .from('daily_logs')
     .select('*')
@@ -422,9 +472,34 @@ $('authForm').addEventListener('submit', async (e) => {
   $('newLogDate').value = data.log_date;
   $('newMinutes').value = data.minutes_in_aleks;
   $('newTopics').value = data.topics_completed;
-  $('newFocus').value = data.focus;
-  $('newDisruption').value = data.disruption;
   $('newNote').value = data.note || '';
+
+  const trackFocus = $('trackFocus');
+  const trackDisruption = $('trackDisruption');
+  const focusWrap = $('focusWrap');
+  const disruptionWrap = $('disruptionWrap');
+  const focusValue = $('focusValue');
+  const disruptionValue = $('disruptionValue');
+
+  if (trackFocus && focusWrap) {
+    trackFocus.checked = data.focus !== null && data.focus !== undefined;
+    focusWrap.classList.toggle('hidden', !trackFocus.checked);
+  }
+
+  if (trackDisruption && disruptionWrap) {
+    trackDisruption.checked = data.disruption !== null && data.disruption !== undefined;
+    disruptionWrap.classList.toggle('hidden', !trackDisruption.checked);
+  }
+
+  if ($('newFocus') && data.focus !== null && data.focus !== undefined) {
+    $('newFocus').value = data.focus;
+    if (focusValue) focusValue.textContent = data.focus;
+  }
+
+  if ($('newDisruption') && data.disruption !== null && data.disruption !== undefined) {
+    $('newDisruption').value = data.disruption;
+    if (disruptionValue) disruptionValue.textContent = data.disruption;
+  }
 }
 
 window.loadLogIntoForm = loadLogIntoForm;
@@ -502,129 +577,217 @@ window.loadLogIntoForm = loadLogIntoForm;
     `;
   }
 
-  async function renderDashboard(){
-    const cycleId = Number($('dashCycle').value);
-    const studentId = Number($('dashStudent').value);
+  async function renderDashboard() {
+  const cycleId = Number($('dashCycle').value);
+  const studentId = Number($('dashStudent').value);
 
-    if (!cycleId || !studentId){
-      $('dashboardBody').innerHTML = `<div class="muted">Create a cycle and add students.</div>`;
-      return;
-    }
-
-    const cycle = state.cycles.find(c => c.id === cycleId);
-    const student = state.students.find(s => s.id === studentId);
-
-    const holidayDates = expandHolidayDates(state.holidays);
-    const teachingDays = state.settings?.teaching_days || [0,1,3,4];
-    const cycleLessonDates = lessonDates(cycle.start_date, cycle.end_date, teachingDays, holidayDates);
-
-    const { data: logs } = await supabase
-      .from('daily_logs')
-      .select('*')
-      .eq('student_id', studentId)
-      .gte('log_date', cycle.start_date)
-      .lte('log_date', cycle.end_date)
-      .order('log_date', { ascending: false });
-
-    const { data: goalRow } = await supabase
-      .from('cycle_goals')
-      .select('*')
-      .eq('cycle_id', cycleId)
-      .eq('student_id', studentId)
-      .maybeSingle();
-
-    const goal = goalRow?.goal_topics || 0;
-    const stats = cycleStats(logs || [], cycleLessonDates.length);
-    const loggedDates = new Set((logs || []).map(l => l.log_date));
-
-    const strip = cycleLessonDates.map(d => `${statusEmoji(d)}${d.slice(5)}${loggedDates.has(d) ? '✓' : ''}`).join(' ');
-    const remaining = Math.max(0, goal - stats.total);
-    const progressActual = goal ? clamp01(Math.min(stats.total, goal) / goal) * 100 : 0;
-    const progressProjected = goal ? clamp01(Math.min(stats.projected, goal) / goal) * 100 : 0;
-    const focusPct = clamp01(stats.avgFocus / 5) * 100;
-    const disruptionPct = clamp01(stats.avgDisruption / 5) * 100;
-
-    const missingDates = cycleLessonDates.filter(d => !loggedDates.has(d));
-
-    $('dashboardBody').innerHTML = `
-      <div class="grid grid-2">
-        <div class="card">
-          <h3>${student.name}</h3>
-          <div>Goal: <strong>${goal || '(not set)'}</strong></div>
-          <div>Completed: <strong>${stats.total}</strong></div>
-          <div>Remaining: <strong>${remaining}</strong></div>
-          <div>Pace: <strong>${stats.pace.toFixed(2)}</strong> topics/logged day</div>
-          <div>Projected: <strong>${stats.projected.toFixed(1)}</strong></div>
-        </div>
-
-        <div class="card">
-          <div>Progress</div>
-          <div class="progress"><div style="width:${progressActual}%"></div></div>
-          <div class="muted">Actual</div>
-          <div style="height:10px"></div>
-          <div class="progress"><div style="width:${progressProjected}%"></div></div>
-          <div class="muted">Projected</div>
-          <div style="height:10px"></div>
-          <div>Focus</div>
-          <div class="progress"><div style="width:${focusPct}%"></div></div>
-          <div style="height:10px"></div>
-          <div>Disruption</div>
-          <div class="progress"><div style="width:${disruptionPct}%"></div></div>
-        </div>
-      </div>
-
-      <div class="card">
-        <h3>Daily report</h3>
-        <div class="lesson-strip">${strip || '<span class="muted">No lesson days in this cycle.</span>'}</div>
-      </div>
-
-      <div class="card">
-        <h3>Add daily report</h3>
-        ${
-          missingDates.length ? `
-          <div class="grid grid-3">
-            <label>Date<select id="newLogDate">${missingDates.map(d => `<option value="${d}">${d}</option>`).join('')}</select></label>
-            <label>Minutes<input id="newMinutes" type="number" min="0" value="50"></label>
-            <label>Topics<input id="newTopics" type="number" min="0" value="0"></label>
-            <label>Focus<input id="newFocus" type="number" min="1" max="5" value="3"></label>
-            <label>Disruption<input id="newDisruption" type="number" min="0" max="5" value="0"></label>
-            <label>Note<textarea id="newNote"></textarea></label>
-          </div>
-          <button style="margin-top:10px;" onclick="window.addLog(${studentId})">Add report</button>
-          ` : `<div class="muted">All lesson days in this cycle already have a report.</div>`
-        }
-      </div>
-
-      <div class="card">
-        <h3>Existing entries</h3>
-        ${
-          logs?.length ? `
-          <table>
-            <thead>
-              <tr><th>Date</th><th>Minutes</th><th>Topics</th><th>Focus</th><th>Disruption</th><th>Note</th><th></th></tr>
-            </thead>
-            <tbody>
-              ${logs.map(l => `
-                <tr>
-                  <td>${l.log_date}</td>
-                  <td>${l.minutes_in_aleks}</td>
-                  <td>${l.topics_completed}</td>
-                  <td>${l.focus}</td>
-                  <td>${l.disruption}</td>
-                  <td>${l.note || ''}</td>
-                  <td>
-                    <button onclick="window.loadLogIntoForm(${l.id})">Edit</button>
-                    <button onclick="window.deleteLog(${l.id})">Delete</button>
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-          ` : `<div class="muted">No daily logs yet.</div>`
-        }
-      </div>
-    `;
+  if (!cycleId || !studentId) {
+    $('dashboardBody').innerHTML = `<div class="muted">Create a cycle and add students.</div>`;
+    return;
   }
+
+  const cycle = state.cycles.find(c => c.id === cycleId);
+  const student = state.students.find(s => s.id === studentId);
+
+  const holidayDates = expandHolidayDates(state.holidays);
+  const teachingDays = state.settings?.teaching_days || [0, 1, 3, 4];
+  const cycleLessonDates = lessonDates(cycle.start_date, cycle.end_date, teachingDays, holidayDates);
+
+  const { data: logs } = await supabase
+    .from('daily_logs')
+    .select('*')
+    .eq('student_id', studentId)
+    .gte('log_date', cycle.start_date)
+    .lte('log_date', cycle.end_date)
+    .order('log_date', { ascending: false });
+
+  const { data: goalRow } = await supabase
+    .from('cycle_goals')
+    .select('*')
+    .eq('cycle_id', cycleId)
+    .eq('student_id', studentId)
+    .maybeSingle();
+
+  const goal = goalRow?.goal_topics || 0;
+  const stats = cycleStats(logs || [], cycleLessonDates.length);
+  const loggedDates = new Set((logs || []).map(l => l.log_date));
+
+  const strip = cycleLessonDates
+    .map(d => `${statusEmoji(d)}${d.slice(5)}${loggedDates.has(d) ? '✓' : ''}`)
+    .join(' ');
+
+  const remaining = Math.max(0, goal - stats.total);
+  const progressActual = goal ? clamp01(Math.min(stats.total, goal) / goal) * 100 : 0;
+  const progressProjected = goal ? clamp01(Math.min(stats.projected, goal) / goal) * 100 : 0;
+  const focusPct = stats.avgFocus === null ? null : clamp01(stats.avgFocus / 5) * 100;
+  const disruptionPct = stats.avgDisruption === null ? null : clamp01(stats.avgDisruption / 5) * 100;
+
+  const missingDates = cycleLessonDates.filter(d => !loggedDates.has(d));
+
+  $('dashboardBody').innerHTML = `
+    <div class="grid grid-2">
+      <div class="card">
+        <h3>${student.name}</h3>
+        <div>Goal: <strong>${goal || '(not set)'}</strong></div>
+        <div>Completed: <strong>${stats.total}</strong></div>
+        <div>Remaining: <strong>${remaining}</strong></div>
+        <div>Pace: <strong>${stats.pace.toFixed(2)}</strong> topics/logged day</div>
+        <div>Projected: <strong>${stats.projected.toFixed(1)}</strong></div>
+      </div>
+
+      <div class="card">
+        <div>Progress</div>
+        <div class="progress"><div style="width:${progressActual}%"></div></div>
+        <div class="muted">Actual</div>
+
+        <div style="height:10px"></div>
+
+        <div class="progress"><div style="width:${progressProjected}%"></div></div>
+        <div class="muted">Projected</div>
+
+        <div style="height:10px"></div>
+
+        <div>Focus</div>
+        ${
+          focusPct === null
+            ? `<div class="muted">Not tracked</div>`
+            : `<div class="progress"><div style="width:${focusPct}%"></div></div>`
+        }
+
+        <div style="height:10px"></div>
+
+        <div>Disruption</div>
+        ${
+          disruptionPct === null
+            ? `<div class="muted">Not tracked</div>`
+            : `<div class="progress"><div style="width:${disruptionPct}%"></div></div>`
+        }
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Daily report</h3>
+      <div class="lesson-strip">${strip || '<span class="muted">No lesson days in this cycle.</span>'}</div>
+    </div>
+
+    <div class="card">
+      <h3>Add daily report</h3>
+      ${
+        missingDates.length ? `
+        <div class="grid grid-3">
+          <label>Date
+            <select id="newLogDate">
+              ${missingDates.map(d => `<option value="${d}">${d}</option>`).join('')}
+            </select>
+          </label>
+
+          <label>Minutes
+            <input id="newMinutes" type="number" min="0" value="50">
+          </label>
+
+          <label>Topics
+            <input id="newTopics" type="number" min="0" value="0">
+          </label>
+
+          <label>
+            <input type="checkbox" id="trackFocus">
+            Track focus
+          </label>
+
+          <div id="focusWrap" class="hidden">
+            <label>Focus
+              <input id="newFocus" type="range" min="1" max="5" value="3">
+            </label>
+            <div class="muted">Value: <span id="focusValue">3</span></div>
+            <div class="muted">1 = low focus, 5 = high focus</div>
+          </div>
+
+          <label>
+            <input type="checkbox" id="trackDisruption">
+            Track disruption
+          </label>
+
+          <div id="disruptionWrap" class="hidden">
+            <label>Disruption
+              <input id="newDisruption" type="range" min="0" max="5" value="0">
+            </label>
+            <div class="muted">Value: <span id="disruptionValue">0</span></div>
+            <div class="muted">0 = none, 5 = severe</div>
+          </div>
+
+          <label>Note
+            <textarea id="newNote"></textarea>
+          </label>
+        </div>
+
+        <button style="margin-top:10px;" onclick="window.addLog(${studentId})">Add report</button>
+        ` : `<div class="muted">All lesson days in this cycle already have a report.</div>`
+      }
+    </div>
+
+    <div class="card">
+      <h3>Existing entries</h3>
+      ${
+        logs?.length ? `
+        <table>
+          <thead>
+            <tr><th>Date</th><th>Minutes</th><th>Topics</th><th>Focus</th><th>Disruption</th><th>Note</th><th></th></tr>
+          </thead>
+          <tbody>
+            ${logs.map(l => `
+              <tr>
+                <td>${l.log_date}</td>
+                <td>${l.minutes_in_aleks}</td>
+                <td>${l.topics_completed}</td>
+                <td>${l.focus ?? ''}</td>
+                <td>${l.disruption ?? ''}</td>
+                <td>${l.note || ''}</td>
+                <td>
+                  <button onclick="window.loadLogIntoForm(${l.id})">Edit</button>
+                  <button onclick="window.deleteLog(${l.id})">Delete</button>
+                </td>
+              </tr>
+            `).join('')}
+          </tbody>
+        </table>
+        ` : `<div class="muted">No daily logs yet.</div>`
+      }
+    </div>
+  `;
+
+  const trackFocus = $('trackFocus');
+  const trackDisruption = $('trackDisruption');
+  const focusWrap = $('focusWrap');
+  const disruptionWrap = $('disruptionWrap');
+  const newFocus = $('newFocus');
+  const newDisruption = $('newDisruption');
+  const focusValue = $('focusValue');
+  const disruptionValue = $('disruptionValue');
+
+  if (trackFocus && focusWrap) {
+    trackFocus.addEventListener('change', () => {
+      focusWrap.classList.toggle('hidden', !trackFocus.checked);
+    });
+  }
+
+  if (trackDisruption && disruptionWrap) {
+    trackDisruption.addEventListener('change', () => {
+      disruptionWrap.classList.toggle('hidden', !trackDisruption.checked);
+    });
+  }
+
+  if (newFocus && focusValue) {
+    newFocus.addEventListener('input', () => {
+      focusValue.textContent = newFocus.value;
+    });
+  }
+
+  if (newDisruption && disruptionValue) {
+    newDisruption.addEventListener('input', () => {
+      disruptionValue.textContent = newDisruption.value;
+    });
+  }
+}
 
 let authBusy = false;
 
@@ -770,15 +933,19 @@ async function addLog(studentId) {
   const log_date = $('newLogDate').value;
   const minutes_in_aleks = Number($('newMinutes').value || 0);
   const topics_completed = Number($('newTopics').value || 0);
-  const focus = Number($('newFocus').value || 3);
-  const disruption = Number($('newDisruption').value || 0);
   const note = $('newNote').value || '';
+
+  const focusTracked = $('trackFocus')?.checked || false;
+  const disruptionTracked = $('trackDisruption')?.checked || false;
+
+  const focus = focusTracked ? Number($('newFocus').value) : null;
+  const disruption = disruptionTracked ? Number($('newDisruption').value) : null;
 
   if (
     minutes_in_aleks === 0 &&
     topics_completed === 0 &&
-    focus === 3 &&
-    disruption === 0 &&
+    focus === null &&
+    disruption === null &&
     note.trim() === ''
   ) {
     alert('This report is blank. Enter some information first.');
