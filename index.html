@@ -804,6 +804,8 @@ async function signUp() {
       });
     });
   }
+  
+let lastUserId = null;
 
 async function updateUIFromSession(session) {
   state.user = session?.user || null;
@@ -816,8 +818,13 @@ async function updateUIFromSession(session) {
     authView.classList.add('hidden');
     appView.classList.remove('hidden');
     teacherInfo.textContent = state.user.email;
-    await loadAll();
+
+    if (lastUserId !== state.user.id) {
+      lastUserId = state.user.id;
+      await loadAll();
+    }
   } else {
+    lastUserId = null;
     authView.classList.remove('hidden');
     appView.classList.add('hidden');
     teacherInfo.textContent = '';
