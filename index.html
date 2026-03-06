@@ -18,6 +18,16 @@
       --bad:#e74c3c;
       --today:#3498db;
     }
+      
+input,
+textarea,
+select {
+  background: #1b2230;
+  color: #f4f7fb;
+  border: 1px solid #3a465c;
+  color-scheme: light;
+}
+
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -62,6 +72,11 @@
       border-radius:10px;
       margin-top:6px;
     }
+
+    option {
+  background: #ffffff;
+  color: #111111;
+}
     textarea{min-height:90px;resize:vertical}
     .grid{display:grid;gap:12px}
     .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -102,16 +117,23 @@
   <div id="authView" class="auth-box panel">
     <h2>ALEKS Calendar</h2>
     <p class="muted">Teacher sign in</p>
-    <div class="grid">
-      <label>Email<input id="email" type="email" /></label>
-      <label>Password<input id="password" type="password" /></label>
-      <div class="row">
-        <button id="signInBtn">Sign in</button>
-        <button id="signUpBtn">Create account</button>
-        <button id="signOutBtn" class="hidden">Sign out</button>
-      </div>
-      <div id="authMsg" class="muted"></div>
-    </div>
+
+    <form id="authForm" class="grid">
+      <label for="email">Email</label>
+  <input id="email" name="email" type="email" autocomplete="email" />
+
+  <label for="password">Password</label>
+  <input id="password" name="password" type="password" autocomplete="current-password" />
+
+  <div class="row">
+    <button id="signInBtn" type="submit">Sign in</button>
+    <button id="signUpBtn" type="button">Create account</button>
+    <button id="signOutBtn" type="button" class="hidden">Sign out</button>
+  </div>
+</div>
+</div>
+        <div id="authMsg" class="muted"></div>
+    </form>
   </div>
 
   <div id="appView" class="hidden">
@@ -236,6 +258,11 @@
   function clamp01(x){ return Math.max(0, Math.min(1, x)); }
   function safeDiv(n,d){ return d > 0 ? n / d : 0; }
 
+$('authForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  await signIn();
+});
+
   function expandHolidayDates(ranges){
     const out = new Set();
     for (const r of ranges){
@@ -275,6 +302,8 @@
     }
     return out;
   }
+
+
 
   function statusEmoji(iso){
     const today = todayIso();
@@ -570,19 +599,88 @@
     `;
   }
 
-  async function signIn(){
-    const email = $('email').value.trim();
-    const password = $('password').value.trim();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    $('authMsg').textContent = error ? error.message : 'Signed in.';
-  }
+let authBusy = false;
 
-  async function signUp(){
+async function signIn() {
+  if (authBusy) return;
+
+  const btn = $('signInBtn');
+  const msg = $('authMsg');
+
+  try {
+    authBusy = true;
+    btn.disabled = true;
+    btn.textContent = 'Signing in...';
+    msg.textContent = '';
+
     const email = $('email').value.trim();
-    const password = $('password').value.trim();
-    const { error } = await supabase.auth.signUp({ email, password });
-    $('authMsg').textContent = error ? error.message : 'Account created. Check email if confirmation is enabled.';
+    const password = $('password').value;
+
+    if (!email || !password) {
+      msg.textContent = 'Enter email and password.';
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      msg.textContent = error.message;
+      return;
+    }
+
+    msg.textContent = 'Signed in.';
+  } catch (err) {
+    console.error('signIn failed', err);
+    msg.textContent = 'Sign in failed.';
+  } finally {
+    authBusy = false;
+    btn.disabled = false;
+    btn.textContent = 'Sign in';
   }
+}
+
+async function signUp() {
+  if (authBusy) return;
+
+  const btn = $('signUpBtn');
+  const msg = $('authMsg');
+
+  try {
+    authBusy = true;
+    btn.disabled = true;
+    btn.textContent = 'Creating...';
+    msg.textContent = '';
+
+    const email = $('email').value.trim();
+    const password = $('password').value;
+
+    if (!email || !password) {
+      msg.textContent = 'Enter email and password.';
+      return;
+    }
+
+    const redirectTo = window.location.origin + window.location.pathname;
+
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectTo
+      }
+    });
+
+    msg.textContent = error
+      ? error.message
+      : 'Account created. Check email if confirmation is enabled.';
+  } catch (err) {
+    console.error('signUp failed', err);
+    msg.textContent = 'Account creation failed.';
+  } finally {
+    authBusy = false;
+    btn.disabled = false;
+    btn.textContent = 'Create account';
+  }
+}
 
   async function signOut(){
     await supabase.auth.signOut();
@@ -710,6 +808,10 @@
 async function updateUIFromSession(session) {
   state.user = session?.user || null;
 
+  const authView = $('authView');
+  const appView = $('appView');
+  const teacherInfo = $('teacherInfo');
+
   if (state.user) {
     authView.classList.add('hidden');
     appView.classList.remove('hidden');
@@ -718,6 +820,7 @@ async function updateUIFromSession(session) {
   } else {
     authView.classList.remove('hidden');
     appView.classList.add('hidden');
+    teacherInfo.textContent = '';
   }
 }
 
@@ -732,9 +835,8 @@ async function initAuth() {
   });
 }
 
-await initAuth();
 
-  $('signInBtn').addEventListener('click', signIn);
+
   $('signUpBtn').addEventListener('click', signUp);
   $('logoutBtn').addEventListener('click', signOut);
   $('saveDaysBtn').addEventListener('click', saveTeachingDays);
@@ -755,7 +857,8 @@ await initAuth();
   window.deleteStudent = deleteStudent;
   window.deleteLog = deleteLog;
 
-  bindTabs();
+ bindTabs();
+await initAuth();
  
 </script>
 </body>
