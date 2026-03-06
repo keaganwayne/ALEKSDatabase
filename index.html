@@ -707,20 +707,32 @@
     });
   }
 
-  async function refreshSessionUI(){
-    const { data: { session } } = await supabase.auth.getSession();
-    state.user = session?.user || null;
+async function updateUIFromSession(session) {
+  state.user = session?.user || null;
 
-    if (state.user){
-      $('authView').classList.add('hidden');
-      $('appView').classList.remove('hidden');
-      $('teacherInfo').textContent = state.user.email;
-      await loadAll();
-    } else {
-      $('authView').classList.remove('hidden');
-      $('appView').classList.add('hidden');
-    }
+  if (state.user) {
+    authView.classList.add('hidden');
+    appView.classList.remove('hidden');
+    teacherInfo.textContent = state.user.email;
+    await loadAll();
+  } else {
+    authView.classList.remove('hidden');
+    appView.classList.add('hidden');
   }
+}
+
+async function initAuth() {
+  const { data, error } = await supabase.auth.getSession();
+  if (error) console.error(error);
+  await updateUIFromSession(data?.session || null);
+
+  supabase.auth.onAuthStateChange(async (event, session) => {
+    console.log('auth event:', event);
+    await updateUIFromSession(session);
+  });
+}
+
+await initAuth();
 
   $('signInBtn').addEventListener('click', signIn);
   $('signUpBtn').addEventListener('click', signUp);
@@ -744,8 +756,7 @@
   window.deleteLog = deleteLog;
 
   bindTabs();
-  supabase.auth.onAuthStateChange(async () => { await refreshSessionUI(); });
-  await refreshSessionUI();
+ 
 </script>
 </body>
 </html>
