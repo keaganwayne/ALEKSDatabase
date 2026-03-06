@@ -172,9 +172,9 @@
 </head>
 <body>
 <div class="wrap">
-  <div id="authView" class="auth-box panel">
     <h2>ALEKS Calendar</h2>
-    <p class="muted">Teacher sign in</p>
+      <div class="muted tiny">v0.3b</div>
+      <p class="muted">Teacher sign in</p>
 
     <form id="authForm" class="grid">
       <label for="email">Email</label>
@@ -195,7 +195,10 @@
   <div id="appView" class="hidden">
     <div class="topbar">
       <div>
-        <strong style="font-size:1.4rem; letter-spacing:0.2px;">ALEKS Calendar</strong>
+        <div>
+  <strong style="font-size:1.4rem; letter-spacing:0.2px;">ALEKS Calendar</strong>
+  <div class="muted tiny">v0.3b</div>
+</div>
         <div class="muted" id="teacherInfo"></div>
       </div>
       <button id="logoutBtn">Sign out</button>
@@ -1060,24 +1063,29 @@
       ctx.restore();
     });
 
-    ctx.fillStyle = '#133a7c';
-    ctx.font = 'bold 14px Arial';
-    ctx.fillText('Current', w - 250, 25);
-    ctx.fillText('Projected', w - 170, 25);
-    ctx.fillText('Goal', w - 70, 25);
+    const legendY = h - 22;
 
     ctx.fillStyle = '#11b7d8';
-    ctx.fillRect(w - 310, 14, 18, 10);
+    ctx.fillRect(padL + 40, legendY - 10, 18, 10);
+
+    ctx.fillStyle = '#133a7c';
+    ctx.font = 'bold 14px Arial';
+    ctx.fillText('Current', padL + 68, legendY);
 
     ctx.fillStyle = '#59c36a';
-    ctx.fillRect(w - 215, 14, 18, 10);
+    ctx.fillRect(padL + 170, legendY - 10, 18, 10);
+    ctx.fillStyle = '#133a7c';
+    ctx.fillText('Projected', padL + 198, legendY);
 
     ctx.strokeStyle = '#2457a6';
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.moveTo(w - 110, 19);
-    ctx.lineTo(w - 80, 19);
+    ctx.moveTo(padL + 330, legendY - 5);
+    ctx.lineTo(padL + 360, legendY - 5);
     ctx.stroke();
+
+    ctx.fillStyle = '#133a7c';
+    ctx.fillText('Goal', padL + 370, legendY);
   }
 
   let authBusy = false;
