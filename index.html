@@ -418,27 +418,38 @@
   }
 
   function cycleStats(logs, lessonDayCount) {
-    const presentLogs = logs.filter(x => x.attendance_status !== 'absent');
-    const total = presentLogs.reduce((a, b) => a + (b.topics_completed || 0), 0);
-    const distinctDays = new Set(presentLogs.map(x => x.log_date)).size;
-    const pace = safeDiv(total, distinctDays);
-    const projected = pace * lessonDayCount;
+  const presentLogs = logs.filter(x => x.attendance_status !== 'absent');
+  const total = presentLogs.reduce((a, b) => a + (b.topics_completed || 0), 0);
+  const totalNewMastered = presentLogs.reduce((a, b) => a + (b.new_topics_mastered || 0), 0);
 
-    const focusLogs = presentLogs.filter(x => x.focus !== null && x.focus !== undefined);
-    const disruptionLogs = presentLogs.filter(x => x.disruption !== null && x.disruption !== undefined);
+  const distinctDays = new Set(presentLogs.map(x => x.log_date)).size;
+  const pace = safeDiv(total, distinctDays);
+  const projected = pace * lessonDayCount;
 
-    const avgFocus = focusLogs.length
-      ? focusLogs.reduce((a, b) => a + Number(b.focus), 0) / focusLogs.length
-      : null;
+  const focusLogs = presentLogs.filter(x => x.focus !== null && x.focus !== undefined);
+  const disruptionLogs = presentLogs.filter(x => x.disruption !== null && x.disruption !== undefined);
 
-    const avgDisruption = disruptionLogs.length
-      ? disruptionLogs.reduce((a, b) => a + Number(b.disruption), 0) / disruptionLogs.length
-      : null;
+  const avgFocus = focusLogs.length
+    ? focusLogs.reduce((a, b) => a + Number(b.focus), 0) / focusLogs.length
+    : null;
 
-    const absences = logs.filter(x => x.attendance_status === 'absent').length;
+  const avgDisruption = disruptionLogs.length
+    ? disruptionLogs.reduce((a, b) => a + Number(b.disruption), 0) / disruptionLogs.length
+    : null;
 
-    return { total, distinctDays, pace, projected, avgFocus, avgDisruption, absences };
-  }
+  const absences = logs.filter(x => x.attendance_status === 'absent').length;
+
+  return {
+    total,
+    totalNewMastered,
+    distinctDays,
+    pace,
+    projected,
+    avgFocus,
+    avgDisruption,
+    absences
+  };
+}
 
   async function ensureTeacherProfile(){
     const { data: existing } = await supabase
@@ -468,36 +479,70 @@
     }
   }
 
-  async function loadAll(){
-    await ensureTeacherProfile();
-
-    const [
-      { data: settings },
-      { data: holidays },
-      { data: cycles },
-      { data: classes },
-      { data: students }
-    ] = await Promise.all([
-      supabase.from('teacher_settings').select('*').eq('teacher_id', state.user.id).single(),
-      supabase.from('holiday_ranges').select('*').order('start_date'),
-      supabase.from('cycles').select('*').order('start_date', { ascending:false }),
-      supabase.from('classes').select('*').order('name'),
-      supabase.from('students').select('*').order('name')
-    ]);
-
-    state.settings = settings || { teaching_days:[0,1,3,4] };
-    state.holidays = holidays || [];
-    state.cycles = cycles || [];
-    state.classes = classes || [];
-    state.students = students || [];
-
-    renderSettings();
-    renderSelectors();
-    renderManage();
-    await loadGoals();
-    await renderDashboard();
-    await renderOverview();
+  function getCurrentSelection() {
+    return {
+      cycleId: $('dashCycle')?.value || '',
+      classId: $('dashClass')?.value || '',
+      studentId: $('dashStudent')?.value || '',
+      goalCycleId: $('goalCycle')?.value || '',
+      goalClassId: $('goalClass')?.value || '',
+      overviewCycleId: $('overviewCycle')?.value || '',
+      overviewClassId: $('overviewClass')?.value || ''
+    };
   }
+
+  function restoreSelectValue(selectId, value) {
+  const el = $(selectId);
+  if (!el || !value) return;
+  const exists = [...el.options].some(opt => opt.value === String(value));
+  if (exists) el.value = String(value);
+}
+
+  async function loadAll(preserved = null){
+  const keep = preserved || getCurrentSelection();
+
+  await ensureTeacherProfile();
+
+  const [
+    { data: settings },
+    { data: holidays },
+    { data: cycles },
+    { data: classes },
+    { data: students }
+  ] = await Promise.all([
+    supabase.from('teacher_settings').select('*').eq('teacher_id', state.user.id).single(),
+    supabase.from('holiday_ranges').select('*').order('start_date'),
+    supabase.from('cycles').select('*').order('start_date', { ascending:false }),
+    supabase.from('classes').select('*').order('name'),
+    supabase.from('students').select('*').order('name')
+  ]);
+
+  state.settings = settings || { teaching_days:[0,1,3,4] };
+  state.holidays = holidays || [];
+  state.cycles = cycles || [];
+  state.classes = classes || [];
+  state.students = students || [];
+
+  renderSettings();
+  renderSelectors();
+
+  restoreSelectValue('dashCycle', keep.cycleId);
+  restoreSelectValue('dashClass', keep.classId);
+  populateStudentSelector();
+  restoreSelectValue('dashStudent', keep.studentId);
+
+  restoreSelectValue('goalCycle', keep.goalCycleId);
+  restoreSelectValue('goalClass', keep.goalClassId);
+
+  restoreSelectValue('overviewCycle', keep.overviewCycleId);
+  restoreSelectValue('overviewClass', keep.overviewClassId);
+
+  renderManage();
+  await loadGoals();
+  renderGoalList();
+  await renderDashboard();
+  await renderOverview();
+}
 
   async function loadGoals(){
     const cycleId = Number($('goalCycle')?.value || state.cycles[0]?.id || 0);
@@ -728,6 +773,7 @@
           <div>Pace: <strong>${fmtNum(stats.pace)}</strong> topics/present day</div>
           <div>Projected: <strong>${fmtNum(stats.projected)}</strong></div>
           <div>Absences: <strong>${stats.absences}</strong></div>
+          <div>New topics mastered: <strong>${stats.totalNewMastered}</strong></div>
         </div>
 
         <div class="card">
@@ -806,6 +852,19 @@
 
           <div class="grid" style="margin-top:12px;">
             <label>
+              <input type="checkbox" id="isKnowledgeCheck">
+              Knowledge check
+            </label>
+
+            <div id="knowledgeCheckWrap" class="hidden">
+              <label>New topics mastered
+                <input id="newTopicsMastered" type="number" min="0" value="0">
+              </label>
+            </div>
+          </div>
+
+          <div class="grid" style="margin-top:12px;">
+            <label>
               <input type="checkbox" id="trackFocus">
               Track focus
             </label>
@@ -846,7 +905,18 @@
           logs?.length ? `
           <table>
             <thead>
-              <tr><th>Date</th><th>Status</th><th>Minutes</th><th>Topics</th><th>Focus</th><th>Disruption</th><th>Note</th><th></th></tr>
+              <tr>
+              <th>Date</th>
+              <th>Status</th>
+              <th>Minutes</th>
+              <th>Topics</th>
+              <th>Knowledge Check</th>
+              <th>New Mastered</th>
+              <th>Focus</th>
+              <th>Disruption</th>
+              <th>Note</th>
+              <th></th>
+              </tr>
             </thead>
             <tbody>
               ${logs.map(l => `
@@ -855,6 +925,8 @@
                   <td>${l.attendance_status}</td>
                   <td>${l.minutes_in_aleks}</td>
                   <td>${l.topics_completed}</td>
+                  <td>${l.is_knowledge_check ? 'Yes' : ''}</td>
+                  <td>${l.new_topics_mastered ?? 0}</td>
                   <td>${l.focus ?? ''}</td>
                   <td>${l.disruption ?? ''}</td>
                   <td>${l.note || ''}</td>
@@ -882,6 +954,19 @@
     const attPresent = $('attPresent');
     const attAbsent = $('attAbsent');
 
+    const isKnowledgeCheck = $('isKnowledgeCheck');
+    const knowledgeCheckWrap = $('knowledgeCheckWrap');
+    const newTopicsMastered = $('newTopicsMastered');
+
+    if (isKnowledgeCheck && knowledgeCheckWrap) {
+      isKnowledgeCheck.addEventListener('change', () => {
+        knowledgeCheckWrap.classList.toggle('hidden', !isKnowledgeCheck.checked);
+        if (!isKnowledgeCheck.checked && newTopicsMastered) {
+          newTopicsMastered.value = 0;
+        }
+  });
+}
+
     if (trackFocus && focusWrap) {
       trackFocus.addEventListener('change', () => {
         focusWrap.classList.toggle('hidden', !trackFocus.checked);
@@ -908,20 +993,28 @@
 
     if (attPresent && attAbsent) {
       const syncAttendanceUI = () => {
-        const isAbsent = attAbsent.checked;
-        $('newMinutes').disabled = isAbsent;
-        $('newTopics').disabled = isAbsent;
-        $('trackFocus').disabled = isAbsent;
-        $('trackDisruption').disabled = isAbsent;
-        if (isAbsent) {
-          $('newMinutes').value = 0;
-          $('newTopics').value = 0;
-          $('trackFocus').checked = false;
-          $('trackDisruption').checked = false;
-          focusWrap.classList.add('hidden');
-          disruptionWrap.classList.add('hidden');
-        }
-      };
+  const isAbsent = attAbsent.checked;
+
+  $('newMinutes').disabled = isAbsent;
+  $('newTopics').disabled = isAbsent;
+  $('trackFocus').disabled = isAbsent;
+  $('trackDisruption').disabled = isAbsent;
+  $('isKnowledgeCheck').disabled = isAbsent;
+
+  if (isAbsent) {
+    $('newMinutes').value = 0;
+    $('newTopics').value = 0;
+
+    $('trackFocus').checked = false;
+    $('trackDisruption').checked = false;
+    focusWrap.classList.add('hidden');
+    disruptionWrap.classList.add('hidden');
+
+    $('isKnowledgeCheck').checked = false;
+    $('newTopicsMastered').value = 0;
+    $('knowledgeCheckWrap').classList.add('hidden');
+  }
+};
       attPresent.addEventListener('change', syncAttendanceUI);
       attAbsent.addEventListener('change', syncAttendanceUI);
       syncAttendanceUI();
@@ -1294,7 +1387,10 @@
     const log_date = $('newLogDate').value;
     const attendance_status = document.querySelector('input[name="attendanceStatus"]:checked')?.value || 'present';
     const note = $('newNote').value || '';
-
+    const is_knowledge_check = $('isKnowledgeCheck')?.checked || false;
+    const new_topics_mastered = is_knowledge_check
+      ? Number($('newTopicsMastered').value || 0)
+      : 0;
     let minutes_in_aleks = Number($('newMinutes').value || 0);
     let topics_completed = Number($('newTopics').value || 0);
 
@@ -1315,6 +1411,7 @@
       attendance_status === 'present' &&
       minutes_in_aleks === 0 &&
       topics_completed === 0 &&
+      new_topics_mastered === 0 &&
       focus === null &&
       disruption === null &&
       note.trim() === ''
@@ -1330,10 +1427,13 @@
       attendance_status,
       minutes_in_aleks,
       topics_completed,
+      is_knowledge_check,
+      new_topics_mastered,
       focus,
       disruption,
       dedication: 0,
       note
+      
     };
 
     const { error } = await supabase
@@ -1347,14 +1447,9 @@
       return;
     }
 
-    await loadAll();
-
-    const classId = Number($('dashClass').value || 0);
-    const students = getStudentsForClass(classId);
-    if (students.some(s => s.id === studentId)) {
-      $('dashStudent').value = String(studentId);
-      await renderDashboard();
-    }
+    const keep = getCurrentSelection();
+    keep.studentId = String(studentId);
+    await loadAll(keep);
   }
 
   async function loadLogIntoForm(logId) {
@@ -1384,6 +1479,18 @@
     const disruptionWrap = $('disruptionWrap');
     const focusValue = $('focusValue');
     const disruptionValue = $('disruptionValue');
+    const kcBox = $('isKnowledgeCheck');
+    const kcWrap = $('knowledgeCheckWrap');
+    const kcInput = $('newTopicsMastered');
+
+    if (kcBox && kcWrap) {
+      kcBox.checked = !!data.is_knowledge_check;
+      kcWrap.classList.toggle('hidden', !kcBox.checked);
+    }
+
+    if (kcInput) {
+      kcInput.value = data.new_topics_mastered ?? 0;
+    }
 
     if (trackFocus && focusWrap) {
       trackFocus.checked = data.focus !== null && data.focus !== undefined;
@@ -1439,11 +1546,12 @@
   }
 
   async function deleteLog(id){
-    if (!confirm('Delete this log entry?')) return;
-    const { error } = await supabase.from('daily_logs').delete().eq('id', id);
-    if (error) return alert(error.message);
-    await loadAll();
-  }
+  if (!confirm('Delete this log entry?')) return;
+  const keep = getCurrentSelection();
+  const { error } = await supabase.from('daily_logs').delete().eq('id', id);
+  if (error) return alert(error.message);
+  await loadAll(keep);
+}
 
   function bindTabs(){
     document.querySelectorAll('.tab-btn').forEach(btn => {
