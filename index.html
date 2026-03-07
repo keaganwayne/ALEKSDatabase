@@ -258,7 +258,7 @@
 <div class="wrap">
   <div id="authView" class="auth-box panel">
     <h2>ALEKS Calendar</h2>
-    <div class="muted tiny">v0.4a</div>
+    <div class="muted tiny">v0.4b</div>
     <p class="muted">Teacher sign in</p>
 
     <form id="authForm" class="grid">
@@ -440,6 +440,8 @@
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const state = {
+    editLogId: null,
+    editLogDate: null
     user: null,
     settings: { teaching_days: [0,1,3,4] },
     holidays: [],
@@ -941,15 +943,26 @@ function bindHelp() {
       </div>
 
       <div class="card">
-        <h3>Add / edit daily report</h3>
+        <h3>${state.editLogId ? 'Edit daily report' : 'Add daily report'}</h3>
         ${
           missingDates.length || logs?.length ? `
           <div class="grid grid-3">
             <label>Date
               <select id="newLogDate">
-                ${[...new Set([...(missingDates || []), ...(logs || []).map(l => l.log_date)])]
-                  .sort()
-                  .map(d => `<option value="${d}">${d}</option>`).join('')}
+                ${(() => {
+                const baseDates = [...missingDates];
+
+                if (state.editLogDate && !baseDates.includes(state.editLogDate)) {
+                  baseDates.push(state.editLogDate);
+                }
+
+                baseDates.sort();
+
+                return baseDates.map(d => {
+                  const selected = d === (state.editLogDate || missingDates[0]) ? 'selected' : '';
+                  return `<option value="${d}" ${selected}>${d}</option>`;
+                }).join('');
+              })()}
               </select>
             </label>
 
@@ -1576,6 +1589,9 @@ function bindHelp() {
       return;
     }
 
+    state.editLogId = null;
+    state.editLogDate = null;
+
     const keep = getCurrentSelection();
     keep.studentId = String(studentId);
     await loadAll(keep);
@@ -1592,6 +1608,9 @@ function bindHelp() {
       alert(error?.message || 'Could not load log.');
       return;
     }
+
+    state.editLogId = data.id;
+    state.editLogDate = data.log_date;
 
     $('newLogDate').value = data.log_date;
     $('newMinutes').value = data.minutes_in_aleks;
@@ -1679,6 +1698,12 @@ function bindHelp() {
   const keep = getCurrentSelection();
   const { error } = await supabase.from('daily_logs').delete().eq('id', id);
   if (error) return alert(error.message);
+
+  if (state.editLogId === id) {
+    state.editLogId = null;
+    state.editLogDate = null;
+  }
+
   await loadAll(keep);
 }
 
