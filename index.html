@@ -432,6 +432,173 @@
   </div>
 </div>
 
+<div id="helpModal" class="help-modal hidden">
+  <div class="help-backdrop" id="helpBackdrop"></div>
+
+  <div class="help-dialog">
+    <div class="help-header">
+      <div>
+        <h2 style="margin:0;">Help Guide</h2>
+        <div class="muted tiny">How to use ALEKS Calendar</div>
+      </div>
+      <button id="closeHelpBtn">Close</button>
+    </div>
+
+    <div class="help-body">
+      <aside class="help-nav">
+        <button class="help-tab active" data-help="start">Start Here</button>
+        <button class="help-tab" data-help="cycles">Cycles</button>
+        <button class="help-tab" data-help="classes">Classes</button>
+        <button class="help-tab" data-help="students">Students</button>
+        <button class="help-tab" data-help="daily">Daily Reports</button>
+        <button class="help-tab" data-help="knowledge">Knowledge Checks</button>
+        <button class="help-tab" data-help="focus">Focus / Disruption</button>
+        <button class="help-tab" data-help="dashboard">Dashboard</button>
+        <button class="help-tab" data-help="overview">Progress Overview</button>
+        <button class="help-tab" data-help="tips">Tips</button>
+      </aside>
+
+      <section class="help-content">
+        <div class="help-panel" data-help-panel="start">
+          <h3>Start Here</h3>
+          <p>Use this order when setting up the app:</p>
+          <ol>
+            <li>Create a <strong>cycle</strong></li>
+            <li>Create a <strong>class</strong></li>
+            <li>Add <strong>students</strong> to that class</li>
+            <li>Set <strong>cycle goals</strong></li>
+            <li>Begin entering <strong>daily reports</strong></li>
+          </ol>
+          <p>A good starting cycle is about <strong>two weeks</strong>. After enough data has been collected, you can adjust goals more accurately.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="cycles">
+          <h3>Cycles</h3>
+          <p>A cycle is the date range you want to track.</p>
+          <p>Examples:</p>
+          <ul>
+            <li>March 17 to March 28</li>
+            <li>April 1 to April 12</li>
+          </ul>
+          <p>Goals, daily reports, pace, and projected progress are all measured inside the selected cycle.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="classes">
+          <h3>Classes</h3>
+          <p>Create each class you teach under the <strong>Manage</strong> tab.</p>
+          <p>Examples:</p>
+          <ul>
+            <li>61A</li>
+            <li>61B</li>
+            <li>62A</li>
+          </ul>
+          <p>Students are then assigned to one class.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="students">
+          <h3>Students</h3>
+          <p>Add each student with:</p>
+          <ul>
+            <li>their name</li>
+            <li>their class</li>
+          </ul>
+          <p>A student should belong to <strong>one class only</strong>.</p>
+          <p>You can edit student names and move them to a different class later if needed.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="daily">
+          <h3>Daily Reports</h3>
+          <p>For each lesson day, record:</p>
+          <ul>
+            <li><strong>Date</strong></li>
+            <li><strong>Minutes</strong> worked in ALEKS</li>
+            <li><strong>Topics</strong> completed</li>
+            <li><strong>Note</strong> if useful</li>
+            <li><strong>Present</strong> or <strong>Absent</strong></li>
+          </ul>
+          <p>If a student attended but did not work, they can still be marked <strong>Present</strong> with 0 minutes or 0 topics.</p>
+          <p>If the student was not in class, mark them <strong>Absent</strong>.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="knowledge">
+          <h3>Knowledge Checks</h3>
+          <p>Knowledge checks are different from normal topic completion.</p>
+          <p>A student may complete very few topics during a lesson but still master new material through a knowledge check.</p>
+          <p>Use the <strong>Knowledge check</strong> option when that happens, then enter:</p>
+          <ul>
+            <li><strong>New topics mastered</strong></li>
+          </ul>
+          <p>Example:</p>
+          <ul>
+            <li>Topics completed = 0</li>
+            <li>Knowledge check = yes</li>
+            <li>New topics mastered = 12</li>
+          </ul>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="focus">
+          <h3>Focus / Disruption</h3>
+          <p>These are optional.</p>
+          <p><strong>Focus</strong> scale:</p>
+          <ul>
+            <li>1 = very low focus</li>
+            <li>5 = very strong focus</li>
+          </ul>
+          <p><strong>Disruption</strong> scale:</p>
+          <ul>
+            <li>0 = no disruption</li>
+            <li>5 = severe disruption</li>
+          </ul>
+          <p>If you do not want to record these on a day, leave them off.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="dashboard">
+          <h3>Dashboard</h3>
+          <p>Select:</p>
+          <ul>
+            <li>Cycle</li>
+            <li>Class</li>
+            <li>Student</li>
+          </ul>
+          <p>The dashboard then shows:</p>
+          <ul>
+            <li><strong>Goal</strong> = target for the cycle</li>
+            <li><strong>Completed</strong> = topics done so far</li>
+            <li><strong>Remaining</strong> = still needed to reach goal</li>
+            <li><strong>Pace</strong> = average topics per present logged day</li>
+            <li><strong>Projected</strong> = estimated cycle finish based on current pace</li>
+            <li><strong>Absences</strong> = days marked absent</li>
+            <li><strong>New topics mastered</strong> = from knowledge checks</li>
+          </ul>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="overview">
+          <h3>Progress Overview</h3>
+          <p>This tab gives a class-level visual comparison.</p>
+          <p>Select a cycle and class to compare students by:</p>
+          <ul>
+            <li><strong>Goal</strong></li>
+            <li><strong>Current progress</strong></li>
+            <li><strong>Projected progress</strong></li>
+          </ul>
+          <p>Use this to quickly see who is on track, behind, or likely to exceed goal.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="tips">
+          <h3>Tips</h3>
+          <ul>
+            <li>Create the cycle first before adding reports.</li>
+            <li>Use absences only when the student was truly not present.</li>
+            <li>Use notes for useful context, not for repeating the numbers.</li>
+            <li>Keep topics completed separate from knowledge-check gains.</li>
+            <li>Review goals after enough real data has been collected.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
 <script type="module">
   import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -942,29 +1109,34 @@ function bindHelp() {
         <div class="lesson-strip">${strip || '<span class="muted">No lesson days in this cycle.</span>'}</div>
       </div>
 
-      <div class="card">
-        <h3>${state.editLogId ? 'Edit daily report' : 'Add daily report'}</h3>
-        ${
-          missingDates.length || logs?.length ? `
-          <div class="grid grid-3">
-            <label>Date
-              <select id="newLogDate">
-                ${(() => {
-                const baseDates = [...missingDates];
+<div class="card">
+  <h3>${state.editLogId ? 'Edit daily report' : 'Add daily report'}</h3>
+  ${
+    missingDates.length || state.editLogId`
+    <div class="grid grid-3">
+      <label>Date
+        <select id="newLogDate">
+          ${(() => {
+            const baseDates = [...missingDates];
 
-                if (state.editLogDate && !baseDates.includes(state.editLogDate)) {
-                  baseDates.push(state.editLogDate);
-                }
+            if (state.editLogDate && !baseDates.includes(state.editLogDate)) {
+              baseDates.push(state.editLogDate);
+            }
 
-                baseDates.sort();
+            baseDates.sort();
 
-                return baseDates.map(d => {
-                  const selected = d === (state.editLogDate || missingDates[0]) ? 'selected' : '';
-                  return `<option value="${d}" ${selected}>${d}</option>`;
-                }).join('');
-              })()}
-              </select>
-            </label>
+            const defaultDate =
+              state.editLogDate ||
+              missingDates[missingDates.length - 1] ||
+              '';
+
+            return baseDates.map(d => {
+              const selected = d === defaultDate ? 'selected' : '';
+              return `<option value="${d}" ${selected}>${d}</option>`;
+            }).join('');
+          })()}
+        </select>
+      </label>
 
             <label>Minutes
               <input id="newMinutes" type="number" min="0" value="50">
@@ -1597,69 +1769,75 @@ function bindHelp() {
     await loadAll(keep);
   }
 
-  async function loadLogIntoForm(logId) {
-    const { data, error } = await supabase
-      .from('daily_logs')
-      .select('*')
-      .eq('id', logId)
-      .maybeSingle();
+async function loadLogIntoForm(logId) {
+  const { data, error } = await supabase
+    .from('daily_logs')
+    .select('*')
+    .eq('id', logId)
+    .maybeSingle();
 
-    if (error || !data) {
-      alert(error?.message || 'Could not load log.');
-      return;
-    }
-
-    state.editLogId = data.id;
-    state.editLogDate = data.log_date;
-
-    $('newLogDate').value = data.log_date;
-    $('newMinutes').value = data.minutes_in_aleks;
-    $('newTopics').value = data.topics_completed;
-    $('newNote').value = data.note || '';
-
-    $('attPresent').checked = data.attendance_status !== 'absent';
-    $('attAbsent').checked = data.attendance_status === 'absent';
-    $('attAbsent').dispatchEvent(new Event('change'));
-
-    const trackFocus = $('trackFocus');
-    const trackDisruption = $('trackDisruption');
-    const focusWrap = $('focusWrap');
-    const disruptionWrap = $('disruptionWrap');
-    const focusValue = $('focusValue');
-    const disruptionValue = $('disruptionValue');
-    const kcBox = $('isKnowledgeCheck');
-    const kcWrap = $('knowledgeCheckWrap');
-    const kcInput = $('newTopicsMastered');
-
-    if (kcBox && kcWrap) {
-      kcBox.checked = !!data.is_knowledge_check;
-      kcWrap.classList.toggle('hidden', !kcBox.checked);
-    }
-
-    if (kcInput) {
-      kcInput.value = data.new_topics_mastered ?? 0;
-    }
-
-    if (trackFocus && focusWrap) {
-      trackFocus.checked = data.focus !== null && data.focus !== undefined;
-      focusWrap.classList.toggle('hidden', !trackFocus.checked);
-    }
-
-    if (trackDisruption && disruptionWrap) {
-      trackDisruption.checked = data.disruption !== null && data.disruption !== undefined;
-      disruptionWrap.classList.toggle('hidden', !trackDisruption.checked);
-    }
-
-    if ($('newFocus') && data.focus !== null && data.focus !== undefined) {
-      $('newFocus').value = data.focus;
-      if (focusValue) focusValue.textContent = data.focus;
-    }
-
-    if ($('newDisruption') && data.disruption !== null && data.disruption !== undefined) {
-      $('newDisruption').value = data.disruption;
-      if (disruptionValue) disruptionValue.textContent = data.disruption;
-    }
+  if (error || !data) {
+    alert(error?.message || 'Could not load log.');
+    return;
   }
+
+  state.editLogId = data.id;
+  state.editLogDate = data.log_date;
+
+  await renderDashboard();
+
+  if ($('newLogDate') && [...$('newLogDate').options].some(o => o.value === data.log_date)) {
+    $('newLogDate').value = data.log_date;
+  }
+
+  $('newLogDate').value = data.log_date;
+  $('newMinutes').value = data.minutes_in_aleks ?? 0;
+  $('newTopics').value = data.topics_completed ?? 0;
+  $('newNote').value = data.note || '';
+
+  $('attPresent').checked = data.attendance_status !== 'absent';
+  $('attAbsent').checked = data.attendance_status === 'absent';
+
+  const trackFocus = $('trackFocus');
+  const trackDisruption = $('trackDisruption');
+  const focusWrap = $('focusWrap');
+  const disruptionWrap = $('disruptionWrap');
+  const focusValue = $('focusValue');
+  const disruptionValue = $('disruptionValue');
+  const kcBox = $('isKnowledgeCheck');
+  const kcWrap = $('knowledgeCheckWrap');
+  const kcInput = $('newTopicsMastered');
+
+  if (kcBox && kcWrap) {
+    kcBox.checked = !!data.is_knowledge_check;
+    kcWrap.classList.toggle('hidden', !kcBox.checked);
+  }
+
+  if (kcInput) {
+    kcInput.value = data.new_topics_mastered ?? 0;
+  }
+
+  if (trackFocus && focusWrap) {
+    trackFocus.checked = data.focus !== null && data.focus !== undefined;
+    focusWrap.classList.toggle('hidden', !trackFocus.checked);
+  }
+
+  if (trackDisruption && disruptionWrap) {
+    trackDisruption.checked = data.disruption !== null && data.disruption !== undefined;
+    disruptionWrap.classList.toggle('hidden', !trackDisruption.checked);
+  }
+
+  if ($('newFocus') && data.focus !== null && data.focus !== undefined) {
+    $('newFocus').value = data.focus;
+    if (focusValue) focusValue.textContent = data.focus;
+  }
+
+  if ($('newDisruption') && data.disruption !== null && data.disruption !== undefined) {
+    $('newDisruption').value = data.disruption;
+    if (disruptionValue) disruptionValue.textContent = data.disruption;
+  }
+
+}
 
   async function deleteHoliday(id){
     if (!confirm('Delete this holiday range?')) return;
@@ -1800,172 +1978,7 @@ function bindHelp() {
   await initAuth();
 </script>
 
-<div id="helpModal" class="help-modal hidden">
-  <div class="help-backdrop" id="helpBackdrop"></div>
 
-  <div class="help-dialog">
-    <div class="help-header">
-      <div>
-        <h2 style="margin:0;">Help Guide</h2>
-        <div class="muted tiny">How to use ALEKS Calendar</div>
-      </div>
-      <button id="closeHelpBtn">Close</button>
-    </div>
-
-    <div class="help-body">
-      <aside class="help-nav">
-        <button class="help-tab active" data-help="start">Start Here</button>
-        <button class="help-tab" data-help="cycles">Cycles</button>
-        <button class="help-tab" data-help="classes">Classes</button>
-        <button class="help-tab" data-help="students">Students</button>
-        <button class="help-tab" data-help="daily">Daily Reports</button>
-        <button class="help-tab" data-help="knowledge">Knowledge Checks</button>
-        <button class="help-tab" data-help="focus">Focus / Disruption</button>
-        <button class="help-tab" data-help="dashboard">Dashboard</button>
-        <button class="help-tab" data-help="overview">Progress Overview</button>
-        <button class="help-tab" data-help="tips">Tips</button>
-      </aside>
-
-      <section class="help-content">
-        <div class="help-panel" data-help-panel="start">
-          <h3>Start Here</h3>
-          <p>Use this order when setting up the app:</p>
-          <ol>
-            <li>Create a <strong>cycle</strong></li>
-            <li>Create a <strong>class</strong></li>
-            <li>Add <strong>students</strong> to that class</li>
-            <li>Set <strong>cycle goals</strong></li>
-            <li>Begin entering <strong>daily reports</strong></li>
-          </ol>
-          <p>A good starting cycle is about <strong>two weeks</strong>. After enough data has been collected, you can adjust goals more accurately.</p>
-        </div>
-
-        <div class="help-panel hidden" data-help-panel="cycles">
-          <h3>Cycles</h3>
-          <p>A cycle is the date range you want to track.</p>
-          <p>Examples:</p>
-          <ul>
-            <li>March 17 to March 28</li>
-            <li>April 1 to April 12</li>
-          </ul>
-          <p>Goals, daily reports, pace, and projected progress are all measured inside the selected cycle.</p>
-        </div>
-
-        <div class="help-panel hidden" data-help-panel="classes">
-          <h3>Classes</h3>
-          <p>Create each class you teach under the <strong>Manage</strong> tab.</p>
-          <p>Examples:</p>
-          <ul>
-            <li>61A</li>
-            <li>61B</li>
-            <li>62A</li>
-          </ul>
-          <p>Students are then assigned to one class.</p>
-        </div>
-
-        <div class="help-panel hidden" data-help-panel="students">
-          <h3>Students</h3>
-          <p>Add each student with:</p>
-          <ul>
-            <li>their name</li>
-            <li>their class</li>
-          </ul>
-          <p>A student should belong to <strong>one class only</strong>.</p>
-          <p>You can edit student names and move them to a different class later if needed.</p>
-        </div>
-
-        <div class="help-panel hidden" data-help-panel="daily">
-          <h3>Daily Reports</h3>
-          <p>For each lesson day, record:</p>
-          <ul>
-            <li><strong>Date</strong></li>
-            <li><strong>Minutes</strong> worked in ALEKS</li>
-            <li><strong>Topics</strong> completed</li>
-            <li><strong>Note</strong> if useful</li>
-            <li><strong>Present</strong> or <strong>Absent</strong></li>
-          </ul>
-          <p>If a student attended but did not work, they can still be marked <strong>Present</strong> with 0 minutes or 0 topics.</p>
-          <p>If the student was not in class, mark them <strong>Absent</strong>.</p>
-        </div>
-
-        <div class="help-panel hidden" data-help-panel="knowledge">
-          <h3>Knowledge Checks</h3>
-          <p>Knowledge checks are different from normal topic completion.</p>
-          <p>A student may complete very few topics during a lesson but still master new material through a knowledge check.</p>
-          <p>Use the <strong>Knowledge check</strong> option when that happens, then enter:</p>
-          <ul>
-            <li><strong>New topics mastered</strong></li>
-          </ul>
-          <p>Example:</p>
-          <ul>
-            <li>Topics completed = 0</li>
-            <li>Knowledge check = yes</li>
-            <li>New topics mastered = 12</li>
-          </ul>
-        </div>
-
-        <div class="help-panel hidden" data-help-panel="focus">
-          <h3>Focus / Disruption</h3>
-          <p>These are optional.</p>
-          <p><strong>Focus</strong> scale:</p>
-          <ul>
-            <li>1 = very low focus</li>
-            <li>5 = very strong focus</li>
-          </ul>
-          <p><strong>Disruption</strong> scale:</p>
-          <ul>
-            <li>0 = no disruption</li>
-            <li>5 = severe disruption</li>
-          </ul>
-          <p>If you do not want to record these on a day, leave them off.</p>
-        </div>
-
-        <div class="help-panel hidden" data-help-panel="dashboard">
-          <h3>Dashboard</h3>
-          <p>Select:</p>
-          <ul>
-            <li>Cycle</li>
-            <li>Class</li>
-            <li>Student</li>
-          </ul>
-          <p>The dashboard then shows:</p>
-          <ul>
-            <li><strong>Goal</strong> = target for the cycle</li>
-            <li><strong>Completed</strong> = topics done so far</li>
-            <li><strong>Remaining</strong> = still needed to reach goal</li>
-            <li><strong>Pace</strong> = average topics per present logged day</li>
-            <li><strong>Projected</strong> = estimated cycle finish based on current pace</li>
-            <li><strong>Absences</strong> = days marked absent</li>
-            <li><strong>New topics mastered</strong> = from knowledge checks</li>
-          </ul>
-        </div>
-
-        <div class="help-panel hidden" data-help-panel="overview">
-          <h3>Progress Overview</h3>
-          <p>This tab gives a class-level visual comparison.</p>
-          <p>Select a cycle and class to compare students by:</p>
-          <ul>
-            <li><strong>Goal</strong></li>
-            <li><strong>Current progress</strong></li>
-            <li><strong>Projected progress</strong></li>
-          </ul>
-          <p>Use this to quickly see who is on track, behind, or likely to exceed goal.</p>
-        </div>
-
-        <div class="help-panel hidden" data-help-panel="tips">
-          <h3>Tips</h3>
-          <ul>
-            <li>Create the cycle first before adding reports.</li>
-            <li>Use absences only when the student was truly not present.</li>
-            <li>Use notes for useful context, not for repeating the numbers.</li>
-            <li>Keep topics completed separate from knowledge-check gains.</li>
-            <li>Review goals after enough real data has been collected.</li>
-          </ul>
-        </div>
-      </section>
-    </div>
-  </div>
-</div>
 
 </body>
 </html>
