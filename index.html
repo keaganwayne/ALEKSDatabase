@@ -21,6 +21,90 @@
       --shadow:0 8px 24px rgba(19,58,124,0.08);
     }
 
+.help-modal{
+  position:fixed;
+  inset:0;
+  z-index:9999;
+}
+.help-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(19,58,124,0.22);
+}
+.help-dialog{
+  position:relative;
+  z-index:2;
+  width:min(1100px, calc(100vw - 40px));
+  height:min(760px, calc(100vh - 40px));
+  margin:20px auto;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:20px;
+  box-shadow:var(--shadow);
+  display:grid;
+  grid-template-rows:auto 1fr;
+  overflow:hidden;
+}
+.help-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:18px 20px;
+  border-bottom:1px solid var(--line);
+  background:#fbfdff;
+}
+.help-body{
+  display:grid;
+  grid-template-columns:240px 1fr;
+  min-height:0;
+}
+.help-nav{
+  border-right:1px solid var(--line);
+  background:#f9fcff;
+  padding:14px;
+  display:grid;
+  gap:8px;
+  align-content:start;
+  overflow:auto;
+}
+.help-tab{
+  text-align:left;
+  background:#fff;
+}
+.help-tab.active{
+  background:var(--accent-2);
+  color:#fff;
+  border-color:var(--accent-2);
+}
+.help-content{
+  padding:22px;
+  overflow:auto;
+}
+.help-content h3{
+  margin-top:0;
+}
+.help-content p,
+.help-content li{
+  line-height:1.55;
+  color:#26456f;
+}
+.help-content ul,
+.help-content ol{
+  padding-left:22px;
+}
+@media (max-width: 900px){
+  .help-body{
+    grid-template-columns:1fr;
+  }
+  .help-nav{
+    border-right:none;
+    border-bottom:1px solid var(--line);
+    grid-auto-flow:column;
+    grid-auto-columns:max-content;
+    overflow:auto;
+  }
+}
+
     *{box-sizing:border-box}
     body{
       margin:0;
@@ -174,7 +258,7 @@
 <div class="wrap">
   <div id="authView" class="auth-box panel">
     <h2>ALEKS Calendar</h2>
-    <div class="muted tiny">v0.3c</div>
+    <div class="muted tiny">v0.4a</div>
     <p class="muted">Teacher sign in</p>
 
     <form id="authForm" class="grid">
@@ -202,7 +286,10 @@
 </div>
         <div class="muted" id="teacherInfo"></div>
       </div>
-      <button id="logoutBtn">Sign out</button>
+      <div class="row">
+        <button id="helpBtn">Help</button>
+        <button id="logoutBtn">Sign out</button>
+      </div>
     </div>
 
     <div class="layout">
@@ -704,6 +791,48 @@
       </table>
     `;
   }
+
+function bindHelp() {
+  const helpBtn = $('helpBtn');
+  const helpModal = $('helpModal');
+  const closeHelpBtn = $('closeHelpBtn');
+  const helpBackdrop = $('helpBackdrop');
+
+  if (!helpBtn || !helpModal) return;
+
+  const openHelp = () => {
+    helpModal.classList.remove('hidden');
+  };
+
+  const closeHelp = () => {
+    helpModal.classList.add('hidden');
+  };
+
+  helpBtn.addEventListener('click', openHelp);
+  closeHelpBtn?.addEventListener('click', closeHelp);
+  helpBackdrop?.addEventListener('click', closeHelp);
+
+  document.querySelectorAll('.help-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.help-tab').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const key = btn.dataset.help;
+      document.querySelectorAll('.help-panel').forEach(panel => {
+        panel.classList.add('hidden');
+      });
+
+      const target = document.querySelector(`[data-help-panel="${key}"]`);
+      if (target) target.classList.remove('hidden');
+    });
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !helpModal.classList.contains('hidden')) {
+      closeHelp();
+    }
+  });
+}
 
   function escapeHtml(str=''){
     return String(str)
@@ -1642,7 +1771,176 @@
   window.updateStudent = updateStudent;
 
   bindTabs();
+  bindHelp();
   await initAuth();
 </script>
+
+<div id="helpModal" class="help-modal hidden">
+  <div class="help-backdrop" id="helpBackdrop"></div>
+
+  <div class="help-dialog">
+    <div class="help-header">
+      <div>
+        <h2 style="margin:0;">Help Guide</h2>
+        <div class="muted tiny">How to use ALEKS Calendar</div>
+      </div>
+      <button id="closeHelpBtn">Close</button>
+    </div>
+
+    <div class="help-body">
+      <aside class="help-nav">
+        <button class="help-tab active" data-help="start">Start Here</button>
+        <button class="help-tab" data-help="cycles">Cycles</button>
+        <button class="help-tab" data-help="classes">Classes</button>
+        <button class="help-tab" data-help="students">Students</button>
+        <button class="help-tab" data-help="daily">Daily Reports</button>
+        <button class="help-tab" data-help="knowledge">Knowledge Checks</button>
+        <button class="help-tab" data-help="focus">Focus / Disruption</button>
+        <button class="help-tab" data-help="dashboard">Dashboard</button>
+        <button class="help-tab" data-help="overview">Progress Overview</button>
+        <button class="help-tab" data-help="tips">Tips</button>
+      </aside>
+
+      <section class="help-content">
+        <div class="help-panel" data-help-panel="start">
+          <h3>Start Here</h3>
+          <p>Use this order when setting up the app:</p>
+          <ol>
+            <li>Create a <strong>cycle</strong></li>
+            <li>Create a <strong>class</strong></li>
+            <li>Add <strong>students</strong> to that class</li>
+            <li>Set <strong>cycle goals</strong></li>
+            <li>Begin entering <strong>daily reports</strong></li>
+          </ol>
+          <p>A good starting cycle is about <strong>two weeks</strong>. After enough data has been collected, you can adjust goals more accurately.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="cycles">
+          <h3>Cycles</h3>
+          <p>A cycle is the date range you want to track.</p>
+          <p>Examples:</p>
+          <ul>
+            <li>March 17 to March 28</li>
+            <li>April 1 to April 12</li>
+          </ul>
+          <p>Goals, daily reports, pace, and projected progress are all measured inside the selected cycle.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="classes">
+          <h3>Classes</h3>
+          <p>Create each class you teach under the <strong>Manage</strong> tab.</p>
+          <p>Examples:</p>
+          <ul>
+            <li>61A</li>
+            <li>61B</li>
+            <li>62A</li>
+          </ul>
+          <p>Students are then assigned to one class.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="students">
+          <h3>Students</h3>
+          <p>Add each student with:</p>
+          <ul>
+            <li>their name</li>
+            <li>their class</li>
+          </ul>
+          <p>A student should belong to <strong>one class only</strong>.</p>
+          <p>You can edit student names and move them to a different class later if needed.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="daily">
+          <h3>Daily Reports</h3>
+          <p>For each lesson day, record:</p>
+          <ul>
+            <li><strong>Date</strong></li>
+            <li><strong>Minutes</strong> worked in ALEKS</li>
+            <li><strong>Topics</strong> completed</li>
+            <li><strong>Note</strong> if useful</li>
+            <li><strong>Present</strong> or <strong>Absent</strong></li>
+          </ul>
+          <p>If a student attended but did not work, they can still be marked <strong>Present</strong> with 0 minutes or 0 topics.</p>
+          <p>If the student was not in class, mark them <strong>Absent</strong>.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="knowledge">
+          <h3>Knowledge Checks</h3>
+          <p>Knowledge checks are different from normal topic completion.</p>
+          <p>A student may complete very few topics during a lesson but still master new material through a knowledge check.</p>
+          <p>Use the <strong>Knowledge check</strong> option when that happens, then enter:</p>
+          <ul>
+            <li><strong>New topics mastered</strong></li>
+          </ul>
+          <p>Example:</p>
+          <ul>
+            <li>Topics completed = 0</li>
+            <li>Knowledge check = yes</li>
+            <li>New topics mastered = 12</li>
+          </ul>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="focus">
+          <h3>Focus / Disruption</h3>
+          <p>These are optional.</p>
+          <p><strong>Focus</strong> scale:</p>
+          <ul>
+            <li>1 = very low focus</li>
+            <li>5 = very strong focus</li>
+          </ul>
+          <p><strong>Disruption</strong> scale:</p>
+          <ul>
+            <li>0 = no disruption</li>
+            <li>5 = severe disruption</li>
+          </ul>
+          <p>If you do not want to record these on a day, leave them off.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="dashboard">
+          <h3>Dashboard</h3>
+          <p>Select:</p>
+          <ul>
+            <li>Cycle</li>
+            <li>Class</li>
+            <li>Student</li>
+          </ul>
+          <p>The dashboard then shows:</p>
+          <ul>
+            <li><strong>Goal</strong> = target for the cycle</li>
+            <li><strong>Completed</strong> = topics done so far</li>
+            <li><strong>Remaining</strong> = still needed to reach goal</li>
+            <li><strong>Pace</strong> = average topics per present logged day</li>
+            <li><strong>Projected</strong> = estimated cycle finish based on current pace</li>
+            <li><strong>Absences</strong> = days marked absent</li>
+            <li><strong>New topics mastered</strong> = from knowledge checks</li>
+          </ul>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="overview">
+          <h3>Progress Overview</h3>
+          <p>This tab gives a class-level visual comparison.</p>
+          <p>Select a cycle and class to compare students by:</p>
+          <ul>
+            <li><strong>Goal</strong></li>
+            <li><strong>Current progress</strong></li>
+            <li><strong>Projected progress</strong></li>
+          </ul>
+          <p>Use this to quickly see who is on track, behind, or likely to exceed goal.</p>
+        </div>
+
+        <div class="help-panel hidden" data-help-panel="tips">
+          <h3>Tips</h3>
+          <ul>
+            <li>Create the cycle first before adding reports.</li>
+            <li>Use absences only when the student was truly not present.</li>
+            <li>Use notes for useful context, not for repeating the numbers.</li>
+            <li>Keep topics completed separate from knowledge-check gains.</li>
+            <li>Review goals after enough real data has been collected.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
