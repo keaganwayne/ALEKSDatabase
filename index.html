@@ -673,13 +673,16 @@
     return '<span class="status-good">🟩</span>';
   }
 
-  function cycleStats(logs, lessonDayCount) {
+function cycleStats(logs, lessonDayCount) {
   const presentLogs = logs.filter(x => x.attendance_status !== 'absent');
+
   const total = presentLogs.reduce((a, b) => a + (b.topics_completed || 0), 0);
   const totalNewMastered = presentLogs.reduce((a, b) => a + (b.new_topics_mastered || 0), 0);
 
-  const distinctDays = new Set(presentLogs.map(x => x.log_date)).size;
-  const pace = safeDiv(total, distinctDays);
+  const loggedDays = new Set(logs.map(x => x.log_date)).size;
+  const presentDays = new Set(presentLogs.map(x => x.log_date)).size;
+
+  const pace = safeDiv(total, loggedDays);
   const projected = pace * lessonDayCount;
 
   const focusLogs = presentLogs.filter(x => x.focus !== null && x.focus !== undefined);
@@ -698,7 +701,8 @@
   return {
     total,
     totalNewMastered,
-    distinctDays,
+    distinctDays: presentDays,
+    loggedDays,
     pace,
     projected,
     avgFocus,
@@ -1068,7 +1072,7 @@ function bindHelp() {
           <div>Goal: <strong>${goal || '(not set)'}</strong></div>
           <div>Completed: <strong>${stats.total}</strong></div>
           <div>Remaining: <strong>${remaining}</strong></div>
-          <div>Pace: <strong>${fmtNum(stats.pace)}</strong> topics/present day</div>
+          <div>Pace: <strong>${fmtNum(stats.pace)}</strong> topics/logged day</div>
           <div>Projected: <strong>${fmtNum(stats.projected)}</strong></div>
           <div>Absences: <strong>${stats.absences}</strong></div>
           <div>New topics mastered: <strong>${stats.totalNewMastered}</strong></div>
