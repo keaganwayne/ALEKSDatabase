@@ -1117,24 +1117,29 @@ function bindHelp() {
       <label>Date
         <select id="newLogDate">
           ${(() => {
-            const baseDates = [...missingDates];
+  const baseDates = [...missingDates];
 
-            if (state.editLogDate && !baseDates.includes(state.editLogDate)) {
-              baseDates.push(state.editLogDate);
-            }
+  if (state.editLogDate && !baseDates.includes(state.editLogDate)) {
+    baseDates.push(state.editLogDate);
+  }
 
-            baseDates.sort();
+  baseDates.sort();
 
-            const defaultDate =
-              state.editLogDate ||
-              missingDates[missingDates.length - 1] ||
-              '';
+  const today = todayIso();
+  const pastOrTodayMissing = baseDates.filter(d => d <= today);
+  const futureMissing = baseDates.filter(d => d > today);
 
-            return baseDates.map(d => {
-              const selected = d === defaultDate ? 'selected' : '';
-              return `<option value="${d}" ${selected}>${d}</option>`;
-            }).join('');
-          })()}
+  const defaultDate =
+    state.editLogDate ||
+    pastOrTodayMissing[pastOrTodayMissing.length - 1] ||
+    futureMissing[0] ||
+    '';
+
+  return baseDates.map(d => {
+    const selected = d === defaultDate ? 'selected' : '';
+    return `<option value="${d}" ${selected}>${d}</option>`;
+  }).join('');
+})()}
         </select>
       </label>
 
