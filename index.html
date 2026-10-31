@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta http-equiv="Content-Security-Policy" content="connect-src 'none'; form-action 'none'; base-uri 'self'; object-src 'none'">
+<script src="demo-data.js"></script>
+<script src="demo-db.js"></script>
+<script src="demo-banner.js"></script>
+
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ALEKS Calendar</title>
@@ -600,10 +605,10 @@
 </div>
 
 <script type="module">
-  import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+  const { createClient } = window.DemoDatabase;
 
-  const SUPABASE_URL = 'https://mcoxldezvehdnzcixiqt.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable_OvT-9qgK6f5j7jBeb6rnJg_Ag93azAf';
+  const SUPABASE_URL = 'https://demo.invalid';
+  const SUPABASE_ANON_KEY = 'local-demo-placeholder-not-a-key';
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   const state = {
